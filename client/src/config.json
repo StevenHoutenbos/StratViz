@@ -1,0 +1,58 @@
+{
+    "tabs": [{
+      "tabName": "Motor Power",
+      "plots": [{
+          "plotName": "motor power",
+          "plotData": [{
+            "sensor": "Motor_Power_1",
+            "postProcessing": "derivative",
+            "lineColor": "blue"
+          }, {
+            "sensor": "Motor_Power_2",
+            "postProcessing": "derivative",
+            "lineColor": "red"
+          }]
+        },
+        {
+          "plotName": "Solar energy",
+          "plotData": [{
+            "sensor": "solar_array_1",
+            "postProcessing": "none",
+            "lineColor": "orange"
+          }, {
+            "sensor": "solar_array_2",
+            "postProcessing": "none",
+            "lineColor": "green"
+          }]
+        }
+      ]
+    }, {
+      "tabName": "second tab",
+      "plots": [{
+          "plotName": "motor power",
+          "plotData": [{
+            "sensor": "Motor_Power_1",
+            "postProcessing": "derivative",
+            "lineColor": "blue"
+          }, {
+            "sensor": "Motor_Power_2",
+            "postProcessing": "derivative",
+            "lineColor": "red"
+          }]
+        },
+        {
+          "plotName": "Solar energy",
+          "plotData": [{
+            "sensor": "solar_array_1",
+            "postProcessing": "none",
+            "lineColor": "orange"
+          }, {
+            "sensor": "solar_array_2",
+            "postProcessing": "none",
+            "lineColor": "green"
+          }]
+        }
+      ]
+    }]
+  }
+  
