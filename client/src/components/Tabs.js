@@ -7,13 +7,23 @@ function valuetext(value) {
   return `${value}°C`;
 }
 
+const minDistance = 2;
+
 function Tabs(props) {
 
   const [activeTab, setActiveTab] = useState(props.children[0].props.tabId);
   const [value, setValue] = React.useState([20, 37]);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setValue([Math.min(newValue[0], value[1] - minDistance), value[1]]);
+    } else {
+      setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
+    }
   };
 
   const onClickTabItem = (tab) => {
@@ -35,6 +45,7 @@ function Tabs(props) {
           onChange={handleChange}
           valueLabelDisplay="auto"
           getAriaValueText={valuetext}
+          disableSwap
         />
       </div>
     </div>
