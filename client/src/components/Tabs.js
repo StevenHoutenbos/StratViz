@@ -46,6 +46,12 @@ function Tabs(props) {
           valueLabelDisplay="auto"
           getAriaValueText={valuetext}
           disableSwap
+          sx={{
+            color: 'white',
+            '& .MuiSlider-thumb': {
+              borderRadius: '4px',
+            },
+          }}
         />
       </div>
     </div>
