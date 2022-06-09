@@ -5,7 +5,7 @@ import Tabs from "./components/Tabs";
 
 function App() {
 
-  const [config, setConfig] = useState(configJSON)
+  const [config, setConfig] = useState(configJSON);
 
   const setTabName = (tabId, newTitle) => {
     console.log(config.tabs.find(x => x._uid === tabId));
@@ -15,7 +15,7 @@ function App() {
     console.log(JSON.stringify(config)); 
   }
 
-    
+  
 
   return (
     <Tabs setTabName={setTabName}>
@@ -27,7 +27,7 @@ function App() {
                 return (
                   <div>
                     <p>
-                      {graph.graphName}
+                      {graph.graphName} 
                     </p>
                   </div>
                 )
