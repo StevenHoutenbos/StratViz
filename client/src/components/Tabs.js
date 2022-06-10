@@ -36,6 +36,16 @@ function Tabs(props) {
     setTabName(tabId, newTitle);
   }
 
+  const deleteTab = (tabId) => {
+    console.log("ewa");
+    deleteTab(tabId);
+  }
+
+  const addTab = (tabId) => {
+    const { addTab} = props;
+    addTab(tabId);
+  }
+
   const footerHTML =
     <div className='footer'>
       <div className='timeAdjustment'>
@@ -71,12 +81,13 @@ function Tabs(props) {
               label={label}
               onClick={onClickTabItem}
               changeTitle={changeTitleTabItem}
+              deleteTab={deleteTab}
               float="left"
               editable="true"
             />
           );
         })}
-        <button id="addTab" onclick="addTab()">
+        <button id="addTab" onMouseDown={addTab}>
           <svg style={{ width: "14px", height: "14px", padding: "0px" }} viewBox="0 0 22 22">
             <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
           </svg>

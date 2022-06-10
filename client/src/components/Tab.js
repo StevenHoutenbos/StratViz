@@ -25,6 +25,10 @@ class Tab extends Component {
     onDoubleClick = () => {
       this.setState({editing: true}); 
     }
+
+    deleteTab = () => {
+      console.log("verwijder tab");
+    }
   
     handleFocus(e) {
       e.currentTarget.select();
@@ -41,6 +45,7 @@ class Tab extends Component {
       const {
         onClick,
         onDoubleClick,
+        deleteTab,
         props: {
           activeTab,
           label,
@@ -59,7 +64,7 @@ class Tab extends Component {
       const labelEditHTML = 
       <>
           <input autoFocus type="text" id='edit' defaultValue={label} onFocus={this.handleFocus} onBlur={this.handleBlur}/>
-          <svg style={{width:"14px",height:"14px",padding:"0px", paddingLeft: "10px"}} viewBox="0 0 22 22" onmousedown="">
+          <svg style={{width:"14px",height:"14px",padding:"0px", paddingLeft: "10px"}} viewBox="0 0 22 22" onmousedown={this.deleteTab}>
           <path fill="currentColor" d="M19,13H5V11H19V13Z" />
           </svg>
       </>
