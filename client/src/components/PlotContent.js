@@ -6,10 +6,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { ButtonGroup } from "@mui/material";
+import { teal } from "@mui/material/colors";
+
+const primary = teal[500];
 
 function PlotContent(props){
 
     const [open, setOpen] = React.useState(false);
+    const [selectedBtn, setSelectedBtn] = React.useState(1);
+
+    const activeColor = teal[500]
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -28,9 +35,15 @@ function PlotContent(props){
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>{props.plotName}</DialogTitle>
                     <DialogContent>
-                    <DialogContentText>
-                        Here we will display options for the plot we want to edit.
-                    </DialogContentText>
+                        <ButtonGroup disableElevation variant="contained" color="primary">
+                            <Button color={selectedBtn === 1 ?  "secondary" : "primary"} onClick={()=>setSelectedBtn(1)}>Lux</Button>
+                            <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(2)}>Stella</Button>
+                            <Button color={selectedBtn === 3 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(3)}>Vie</Button>
+                        </ButtonGroup>
+                        <DialogContentText>
+                            Here we will display options for the plot we want to edit.
+                        </DialogContentText>
+
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
