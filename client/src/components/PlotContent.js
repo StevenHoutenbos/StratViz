@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
+import Plot from 'react-plotly.js';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -51,6 +52,18 @@ function PlotContent(props){
                     </DialogActions>
                 </Dialog>
             </p>
+            <Plot
+                    data={[
+                      {
+                      x: [1, 2, 3, 4, 5, 6, 7],
+                      y: [2, 6, 3, 5, 1, 8, 3],
+                      type: 'scatter',
+                      mode: 'lines',
+                      marker: {color: 'red'},
+                      }
+                    ]}
+                    layout={ {width: 450, height: 300, title: 'Motor Power'} }
+                    />
         </div>
     )
 }
