@@ -89,6 +89,22 @@ body, #app, #app>div{
   justify-content: center;
 }
 
+.plotMenuGridContainer{
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr 20px ;
+  height: 100%;
+}
+
+.plotMenuGridTitleWrapper{
+  display: contents;
+}
+
+.plotMenuGridTitleWrapper > div {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 .timeAdjustment{
   background: gray;
   margin: 0px 14px 14px 14px;
