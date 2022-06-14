@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
 import Slider from '@mui/material/Slider';
+import NonContinous from './NonContinuous';
 
 function valuetext(value) {
   return `${value}°C`;
@@ -35,6 +36,8 @@ function Tabs(props) {
     const { setTabName } = props;
     setTabName(tabId, newTitle);
   }
+
+  const nonContinous = <NonContinous/>
 
   const footerHTML =
     <div className='footer'>
@@ -96,8 +99,10 @@ function Tabs(props) {
           if (child.props.tabId !== activeTab) return undefined;
           return child.props.children;
         })}
+        {activeTab === "config" ? nonContinous : undefined}
       </div>
       {activeTab === "config" ? undefined : footerHTML}
+
 
     </div>
   )

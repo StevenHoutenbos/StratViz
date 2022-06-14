@@ -1,0 +1,12 @@
+{ "signals" : [
+    {
+        "signalName": "Window wiper speed", 
+        "value": "3"
+    },    {
+        "signalName": "Headlights", 
+        "value": "High"
+    },    {
+        "signalName": "Horn", 
+        "value": "Off"
+    }
+]}
