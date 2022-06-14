@@ -100,7 +100,7 @@ function Tabs(props) {
   const footerHTML =
     <div className='footer'>
       <div className='timeAdjustment'>
-        <ButtonGroup disableElevation variant="contained" color="primary">
+        <ButtonGroup disableElevation className='buttonGroup' variant="contained" color="primary">
             <Button style={{height: '30px'}} color={selectedBtn === 1 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(1)}><TimelineIcon/></Button>
             <Button style={{height: '30px'}} color={selectedBtn === 2 ? "secondary" : "primary"} onClick={()=>{setSelectedBtn(2); setValue([value[1], maxSliderVal])}}><HistoryIcon/></Button>
         </ButtonGroup>
