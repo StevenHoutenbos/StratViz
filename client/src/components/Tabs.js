@@ -23,12 +23,12 @@ const PrettoSlider = styled(Slider)({
   height: 0,
   '& .MuiSlider-track': {
     border: 'none',
-    height: 40,
+    height: 30,
     borderRadius: "4px"
   },
   '& .MuiSlider-thumb': {
-    height: 40,
-    width: 40,
+    height: 30,
+    width: 30,
     borderRadius: "4px",
     '&:before': {
       display: 'none',
@@ -101,8 +101,8 @@ function Tabs(props) {
     <div className='footer'>
       <div className='timeAdjustment'>
         <ButtonGroup disableElevation variant="contained" color="primary">
-            <Button style={{height: '40px'}} color={selectedBtn === 1 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(1)}><TimelineIcon/></Button>
-            <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={()=>{setSelectedBtn(2); setValue([value[1], maxSliderVal])}}><HistoryIcon/></Button>
+            <Button style={{height: '30px'}} color={selectedBtn === 1 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(1)}><TimelineIcon/></Button>
+            <Button style={{height: '30px'}} color={selectedBtn === 2 ? "secondary" : "primary"} onClick={()=>{setSelectedBtn(2); setValue([value[1], maxSliderVal])}}><HistoryIcon/></Button>
         </ButtonGroup>
         <div className='sliderWrapper'>
           <PrettoSlider
