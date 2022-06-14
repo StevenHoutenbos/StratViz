@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import RemoveIcon from '@mui/icons-material/Remove';
+import TextField from '@mui/material/TextField';
 
 function PlotContent(props){
 
@@ -22,9 +23,8 @@ function PlotContent(props){
 
     return (
         <div>
-            <p>
                 <Button variant="outlined" onClick={handleClickOpen}>
-                    {props.plotName}
+                    edit
                 </Button>
                 <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
                     <DialogTitle>{props.plotName}</DialogTitle>
@@ -54,14 +54,19 @@ function PlotContent(props){
                                 <RemoveIcon/>
                             </div>
                         </div>
-
+                        <TextField
+                        fullWidth
+                        id="filled-search"
+                        label="Search field"
+                        type="search"
+                        sx={{marginTop: "20px"}}
+                        />
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleClose}>Save</Button>
                     </DialogActions>
                 </Dialog>
-            </p>
         </div>
     )
 }
