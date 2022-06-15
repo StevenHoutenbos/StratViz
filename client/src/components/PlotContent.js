@@ -41,10 +41,7 @@ function PlotContent(props) {
                     }
                 ]}
                 layout={{
-                    autosize: true,
-                    height: 200,
-                    useResizeHandler: true,
-                    autoExpand: true,
+                    height: 300,
                     className: "plotGraph",
                     margin: {
                         l: 50,
@@ -54,6 +51,7 @@ function PlotContent(props) {
                         pad: 15
                       }
                 }}
+                config={{responsive: true}}
             />
                 <Button variant="contained" onClick={handleClickOpen} className="editButton">
                     <EditIcon/>
