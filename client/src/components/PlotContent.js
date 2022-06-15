@@ -9,6 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
+import { TiPencil } from 'react-icons/ti';
 
 const primary = teal[500];
 
@@ -28,10 +29,25 @@ function PlotContent(props){
     };
 
     return (
-        <div>
-            <p>
-                <Button variant="outlined" onClick={handleClickOpen}>
-                    {props.plotName}
+        <div class="plotContainer">
+            <Plot
+                    data={[
+                      {
+                      x: [1, 2, 3, 4, 5, 6, 7],
+                      y: [2, 6, 3, 5, 1, 8, 3],
+                      type: 'scatter',
+                      mode: 'lines',
+                      marker: {color: 'red'},
+                      }
+                    ]}
+                    layout={ {
+                              autosize: true,
+                              useResizeHandler: true,
+                              className: "plotGraph"} }
+                    />
+                    <p>
+                <Button variant="outlined" onClick={handleClickOpen} class="editButton" style={{position: "relative", top: "-210px", borderRadius: "10px"}}>
+                    <TiPencil/>
                 </Button>
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>{props.plotName}</DialogTitle>
@@ -52,19 +68,8 @@ function PlotContent(props){
                     </DialogActions>
                 </Dialog>
             </p>
-            <Plot
-                    data={[
-                      {
-                      x: [1, 2, 3, 4, 5, 6, 7],
-                      y: [2, 6, 3, 5, 1, 8, 3],
-                      type: 'scatter',
-                      mode: 'lines',
-                      marker: {color: 'red'},
-                      }
-                    ]}
-                    layout={ {width: 450, height: 300, title: 'Motor Power'} }
-                    />
         </div>
+        
     )
 }
 
