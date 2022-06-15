@@ -65,10 +65,10 @@ body, #app, #app>div{
 
 .gridContainer{
   display: grid;
-  grid-template-columns: 1fr 1fr  ;
-  grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 200px;
   grid-gap: 14px;
-  height: 100%;
+  height: auto;
 }
 
 .tab-content{
@@ -100,8 +100,16 @@ body, #app, #app>div{
   align-items: center;
   justify-content: center;
 }
-  
-.gridContainer > div > p{
-  font-size: 14px;
+
+.editButton{
+  position: absolute !important;
+  top: 20px;
+  right: 20px;
+}
+
+.plotContainer{
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
 }
 
