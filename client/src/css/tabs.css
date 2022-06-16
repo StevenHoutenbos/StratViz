@@ -87,16 +87,34 @@ body, #app, #app>div{
 }
 
 .timeAdjustment{
-  background: gray;
+  /* background: gray; */
   margin: 0px 14px 14px 14px;
   height: 40px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px #ddd;
-  padding: 0px 20px 0px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+.sliderWrapper{
+  background: gray;
+  flex-grow: 1;
+  margin-left: 14px;
+  border-radius: 4px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-shadow: 0px 0px 10px #ccc;
+}
+
+.buttonGroup{
+  box-shadow: 0px 0px 10px #000;
+}
+  
+.gridContainer > div > p{
+  font-size: 14px;
 
 .editButton{
   position: absolute !important;
