@@ -2,8 +2,18 @@ import React, { useState } from 'react';
 import "./css/tabs.css";
 import configJSON from "./tabsConfig.json"
 import Tabs from "./components/Tabs";
+import PlotContent from "./components/PlotContent"
 
 function App() {
+
+  var tabIdCounter = 0;
+
+  const getNewTabId = () => {
+    while (config.tabs.find(x => x._uid === tabIdCounter) != undefined) {
+      tabIdCounter++;
+    }
+    return tabIdCounter;
+  }
 
   const [config, setConfig] = useState(configJSON);
 
@@ -12,26 +22,43 @@ function App() {
     const newConfig = structuredClone(config);
     newConfig.tabs.find(x => x._uid === tabId).tabName = newTitle;
     setConfig(newConfig);
-    console.log(JSON.stringify(config)); 
+    console.log(JSON.stringify(config));
   }
 
-  
+  const newTab = (newTabId) => {
+    return {
+      _uid: "joe",
+      tabName: "new tab",
+      graphs: [
+        {
+          graphName: "new title"
+        },
+        {
+          graphName: "new title"
+        },
+        {
+          graphName: "new title"
+        },
+        {
+          graphName: "new title"
+        }
+      ]
+    }
+  }
+
+  const addTab = (tabId) => {
+    var tabsState = {...config.tabs};
+    tabsState.push(newTab(tabId));
+    setConfig({tabsState});
+  }
 
   return (
-    <Tabs setTabName={setTabName}>
+    <Tabs setTabName={setTabName} addTab={addTab}>
       {config.tabs.map((tab) => {
         return (
           <div label={tab.tabName} tabId={tab._uid}>
             <div className='gridContainer'>
-              {tab.graphs.map((graph) => {
-                return (
-                  <div>
-                    <p>
-                      {graph.graphName} 
-                    </p>
-                  </div>
-                )
-              })}
+              {tab.graphs.map(graph => <PlotContent plotName = {graph.graphName}/>)}
             </div>
           </div>
         )
