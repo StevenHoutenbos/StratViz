@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import EditIcon from '@mui/icons-material/Edit';
-import * as socketData from '../index.js';
+//import * as socketData from '../index.js';
 
 const primary = teal[500];
 
@@ -30,9 +30,9 @@ function PlotContent(props) {
     };
 
     // Dynamic JSON data
-    const plotData = socketData.data;
-    console.log("test");
-    console.log(plotData);
+    //const plotData = socketData.data;
+    //console.log("test");
+    //console.log(plotData);
 
     // Static JSON object definition
     const myJSON1 = '{"timestamp":"15/06/2022 20:33:20", "value":30}';
