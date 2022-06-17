@@ -115,6 +115,7 @@ body, #app, #app>div{
   
 .gridContainer > div > p{
   font-size: 14px;
+}
 
 .editButton{
   position: absolute !important;
