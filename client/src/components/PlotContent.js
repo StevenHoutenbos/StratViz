@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import EditIcon from '@mui/icons-material/Edit';
+//import * as socketData from '../index.js';
 
 const primary = teal[500];
 
@@ -28,38 +29,47 @@ function PlotContent(props) {
         setOpen(false);
     };
 
+    // Dynamic JSON data
+    //const plotData = socketData.data;
+    //console.log("test");
+    //console.log(plotData);
+
     // Static JSON object definition
-    const myJSON1 = '{"timestamp":"14/06/2022 20:33:20", "value":30}';
+    const myJSON1 = '{"timestamp":"15/06/2022 20:33:20", "value":30}';
     const myObj1 = JSON.parse(myJSON1);
-    const myJSON2 = '{"timestamp":"15/06/2022 20:34:20", "value":35}';
+    const myJSON2 = '{"timestamp":"15/06/2022 20:34:20", "value":12}';
     const myObj2 = JSON.parse(myJSON2);
-    const myJSON3 = '{"timestamp":"15/06/2022 20:35:20", "value":32}';
+    const myJSON3 = '{"timestamp":"15/06/2022 20:35:20", "value":72}';
     const myObj3 = JSON.parse(myJSON3);
-    const myJSON4 = '{"timestamp":"15/06/2022 20:36:20", "value":30}';
+    const myJSON4 = '{"timestamp":"15/06/2022 20:36:20", "value":16}';
     const myObj4 = JSON.parse(myJSON4);
-    const myJSON5 = '{"timestamp":"15/06/2022 20:37:20", "value":35}';
+    const myJSON5 = '{"timestamp":"15/06/2022 20:37:20", "value":2}';
     const myObj5 = JSON.parse(myJSON5);
-    const myJSON6 = '{"timestamp":"15/06/2022 20:38:20", "value":32}';
+    const myJSON6 = '{"timestamp":"15/06/2022 20:38:20", "value":29}';
     const myObj6 = JSON.parse(myJSON6);
-    const myJSON7 = '{"timestamp":"15/06/2022 20:39:20", "value":30}';
+    const myJSON7 = '{"timestamp":"15/06/2022 20:39:20", "value":41}';
     const myObj7 = JSON.parse(myJSON7);
     const myJSON8 = '{"timestamp":"15/06/2022 20:40:20", "value":35}';
     const myObj8 = JSON.parse(myJSON8);
-    const myJSON9 = '{"timestamp":"15/06/2022 20:41:20", "value":32}';
+    const myJSON9 = '{"timestamp":"15/06/2022 20:41:20", "value":29}';
     const myObj9 = JSON.parse(myJSON9);
 
     const data = [myObj1, myObj2, myObj3, myObj4, myObj5, myObj6, myObj7, myObj8, myObj9];
+    // If the connection to the database works, all we should need to do is switch from the line above to
+    // const data = plotData
 
     let x = [];
     let y = [];
 
     for (let i=0; i < data.length; i++) {
         x.push(data[i].timestamp);
+        // TODO: Switch to actual signal name when connection is up
         y.push(data[i].value);
     }
 
     let trace = {
         type: "scatter",
+        fill: "tozeroy",
         mode: "lines",
         name: "Motor Power",
         x: x,
@@ -71,7 +81,7 @@ function PlotContent(props) {
         title: "Motor Power",
         xaxis: {
             autorange: true,
-            range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"],
+            range: ["15/06/2022 20:33:20", "15/06/2022 20:41:20"],
             rangeselector: {buttons: [
                 {
                   count: 1,
@@ -104,7 +114,7 @@ function PlotContent(props) {
         },
         yaxis: {
             autorange: true,
-            range: [0, 50],
+            range: [0, 100],
             type: "linear"
         },
         autosize: true,
@@ -118,29 +128,10 @@ function PlotContent(props) {
     return (
         <div class="plotContainer">
             <Plot
-                data={[
-                    {
-                        x: [1, 2, 3, 4, 5, 6, 7],
-                        y: [2, 6, 3, 5, 1, 8, 3],
-                        type: 'scatter',
-                        mode: 'lines',
-                        marker: { color: 'red' },
-                    }
-                ]}
-                layout={{
-                    height: 300,
-                    className: "plotGraph",
-                    margin: {
-                        l: 50,
-                        r: 30,
-                        b: 50,
-                        t: 30,
-                        pad: 15
-                      }
-                }}
-                config={{responsive: true}}
-            />
-                <Button variant="contained" onClick={handleClickOpen} className="editButton">
+                    data={[trace]}
+                    layout={styling}
+                    />
+                <Button variant="outlined" onClick={handleClickOpen} class="editButton" style={{position: "relative", top: "-210px", borderRadius: "10px"}}>
                     <EditIcon/>
                 </Button>
                 <Dialog open={open} onClose={handleClose}>
@@ -162,7 +153,6 @@ function PlotContent(props) {
                     </DialogActions>
                 </Dialog>
         </div>
-
     )
 }
 
