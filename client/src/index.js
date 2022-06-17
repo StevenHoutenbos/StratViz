@@ -3,13 +3,20 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-const { io, connect } = require('socket.io-client');
+import io from 'socket.io-client';
 
-const socket = io('http://localhost:3001');
+const socket = io('http://localhost:4000');
+
+socket.on("dataevent", (data) => {
+  console.log(data);
+})
 
 socket.on("connect", () => {
-  alert(`You are connected to the server with id: ${socket.id}`);
-  socket.emit("canMessage", "Era", -1600453413400000, "0c9#ffa70000b3de9876")
+  console.log("Connected");
+})
+
+socket.on("connect_error", (error) => {
+  console.log(`Error: ${error.message}`);
 })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

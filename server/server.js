@@ -1,6 +1,6 @@
-const io = require('socket.io')(3001, {
+const io = require('socket.io')(4000, {
     cors: {
-        origin: ['http://localhost:3000'] // This relates to sockets trying to connect from other origins than the active process
+        origin: '*', // This relates to sockets trying to connect from other origins than the active process
     }
 })
 
