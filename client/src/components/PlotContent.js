@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import { TiPencil } from 'react-icons/ti';
+import * as socketData from '../index.js';
 
 const primary = teal[500];
 
@@ -27,6 +28,11 @@ function PlotContent(props){
     const handleClose = () => {
       setOpen(false);
     };
+
+    // Dynamic JSON data
+    const plotData = socketData.data;
+    console.log("test");
+    console.log(plotData);
 
     // Static JSON object definition
     const myJSON1 = '{"timestamp":"14/06/2022 20:33:20", "value":30}';
@@ -49,12 +55,16 @@ function PlotContent(props){
     const myObj9 = JSON.parse(myJSON9);
 
     const data = [myObj1, myObj2, myObj3, myObj4, myObj5, myObj6, myObj7, myObj8, myObj9];
+    // If the connection to the database works, all we should need to do is switch from the line above to
+    // const data = plotData
 
     let x = [];
     let y = [];
 
     for (let i=0; i < data.length; i++) {
         x.push(data[i].timestamp);
+
+        // TODO: Switch to actual signal name when connection is up
         y.push(data[i].value);
     }
 

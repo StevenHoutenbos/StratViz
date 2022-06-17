@@ -3,8 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-const { io, connect } = require('socket.io-client');
 
+// Holds array of JSON objects obtained from the server
+let data;
+export {data};
+
+const { io, connect } = require('socket.io-client');
 const socket = io('http://localhost:3001');
 
 socket.on("connect", () => {
@@ -19,8 +23,8 @@ root.render(
   </React.StrictMode>
 );
 
-io.on("dataevent", (data) => {
-  console.log(data + "!");
+socket.on("dataevent", (arg) => {
+  data = arg;
 });
 
 // If you want to start measuring performance in your app, pass a function
