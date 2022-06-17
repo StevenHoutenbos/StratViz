@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
-import { TiPencil } from 'react-icons/ti';
+import EditIcon from '@mui/icons-material/Edit';
 import * as socketData from '../index.js';
 
 const primary = teal[500];
@@ -132,9 +132,8 @@ function PlotContent(props) {
                     data={[trace]}
                     layout={styling}
                     />
-                    <p>
                 <Button variant="outlined" onClick={handleClickOpen} class="editButton" style={{position: "relative", top: "-210px", borderRadius: "10px"}}>
-                    <TiPencil/>
+                    <EditIcon/>
                 </Button>
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>{props.plotName}</DialogTitle>
@@ -155,7 +154,6 @@ function PlotContent(props) {
                     </DialogActions>
                 </Dialog>
         </div>
-
     )
 }
 
