@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-const { io, connect } = require('socket.io-client');
 
+//let data;
+//export {data};
+
+const { io, connect } = require('socket.io-client');
 const socket = io('http://localhost:3001');
 
 socket.on("connect", () => {
-  alert(`You are connected to the server with id: ${socket.id}`);
-  socket.emit("canMessage", "Era", -1600453413400000, "0c9#ffa70000b3de9876")
+  console.log("Connected");
+})
+
+socket.on("connect_error", (error) => {
+  console.log(`Error: ${error.message}`);
 })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,6 +24,10 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// socket.on("dataevent", (arg) => {
+//   //data = arg;
+// });
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
