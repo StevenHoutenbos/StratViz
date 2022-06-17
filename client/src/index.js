@@ -5,10 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:4000'); 
+const socket = io('http://localhost:4000');
 
-socket.on("dataevent", (data) => {  
-  console.log(`Data received: ${data.count}`);
+socket.on("dataevent", (data) => {
+  console.log(data);
+})
+
+socket.on("connect", () => {
+  console.log("Connected");
+})
+
+socket.on("connect_error", (error) => {
+  console.log(`Error: ${error.message}`);
 })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
