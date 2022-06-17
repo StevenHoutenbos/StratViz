@@ -105,3 +105,15 @@ body, #app, #app>div{
   font-size: 14px;
 }
 
+.editButton{
+  position: absolute !important;
+  top: 20px;
+  right: 20px;
+}
+
+.plotContainer{
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
