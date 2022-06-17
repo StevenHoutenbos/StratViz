@@ -70,6 +70,7 @@ function PlotContent(props){
 
     let trace = {
         type: "scatter",
+        fill: "tozeroy",
         mode: "lines",
         name: "Motor Power",
         x: x,
