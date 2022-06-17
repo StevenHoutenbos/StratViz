@@ -63,7 +63,6 @@ function PlotContent(props) {
 
     for (let i=0; i < data.length; i++) {
         x.push(data[i].timestamp);
-
         // TODO: Switch to actual signal name when connection is up
         y.push(data[i].value);
     }
