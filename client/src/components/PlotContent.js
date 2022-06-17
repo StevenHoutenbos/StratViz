@@ -28,6 +28,93 @@ function PlotContent(props) {
         setOpen(false);
     };
 
+    // Static JSON object definition
+    const myJSON1 = '{"timestamp":"14/06/2022 20:33:20", "value":30}';
+    const myObj1 = JSON.parse(myJSON1);
+    const myJSON2 = '{"timestamp":"15/06/2022 20:34:20", "value":35}';
+    const myObj2 = JSON.parse(myJSON2);
+    const myJSON3 = '{"timestamp":"15/06/2022 20:35:20", "value":32}';
+    const myObj3 = JSON.parse(myJSON3);
+    const myJSON4 = '{"timestamp":"15/06/2022 20:36:20", "value":30}';
+    const myObj4 = JSON.parse(myJSON4);
+    const myJSON5 = '{"timestamp":"15/06/2022 20:37:20", "value":35}';
+    const myObj5 = JSON.parse(myJSON5);
+    const myJSON6 = '{"timestamp":"15/06/2022 20:38:20", "value":32}';
+    const myObj6 = JSON.parse(myJSON6);
+    const myJSON7 = '{"timestamp":"15/06/2022 20:39:20", "value":30}';
+    const myObj7 = JSON.parse(myJSON7);
+    const myJSON8 = '{"timestamp":"15/06/2022 20:40:20", "value":35}';
+    const myObj8 = JSON.parse(myJSON8);
+    const myJSON9 = '{"timestamp":"15/06/2022 20:41:20", "value":32}';
+    const myObj9 = JSON.parse(myJSON9);
+
+    const data = [myObj1, myObj2, myObj3, myObj4, myObj5, myObj6, myObj7, myObj8, myObj9];
+
+    let x = [];
+    let y = [];
+
+    for (let i=0; i < data.length; i++) {
+        x.push(data[i].timestamp);
+        y.push(data[i].value);
+    }
+
+    let trace = {
+        type: "scatter",
+        mode: "lines",
+        name: "Motor Power",
+        x: x,
+        y: y,
+        line: {color: '#17BECF'}
+    }
+
+    let styling = {
+        title: "Motor Power",
+        xaxis: {
+            autorange: true,
+            range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"],
+            rangeselector: {buttons: [
+                {
+                  count: 1,
+                  label: '1h',
+                  step: 'hour',
+                  stepmode: 'backward'
+                },
+                {
+                  count: 6,
+                  label: '6h',
+                  step: 'hour',
+                  stepmode: 'backward'
+                },
+                {
+                    count: 12,
+                    label: '12h',
+                    step: 'hours',
+                    stepmode: 'backward'
+                  },
+                  {
+                    count: 24,
+                    label: '24h',
+                    step: 'hour',
+                    stepmode: 'backward'
+                  },
+                {step: 'all'}
+              ]},
+              rangeslider: {range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"]},
+              type: 'datetime'
+        },
+        yaxis: {
+            autorange: true,
+            range: [0, 50],
+            type: "linear"
+        },
+        autosize: true,
+        useResizeHandler: true,
+        className: "plotGraph"
+    };
+
+    // console.log(trace.x);
+
+
     return (
         <div class="plotContainer">
             <Plot
