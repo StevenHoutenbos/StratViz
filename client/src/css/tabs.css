@@ -71,6 +71,23 @@ body, #app, #app>div{
   height: 100%;
 }
 
+.ncGridContainer{
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+}
+
+.ncGridContainer > div{
+  padding-right: 20px;
+}
+
+
+.card{
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0px 0px 10px #ddd;
+  padding: 20px;
+}
+
 .tab-content{
   flex: 1 1 auto;
   padding: 14px;
