@@ -135,7 +135,7 @@ function PlotContent(props) {
             type: "linear"
         },
         width: width,
-        height: height + 10,
+        height: height + 10 - 36,
         autosize: true,
         useResizeHandler: true,
         className: "plotGraph",
