@@ -169,7 +169,7 @@ function Tabs(props) {
           if (child.props.tabId !== activeTab) return undefined;
           return child.props.children;
         })}
-        {activeTab === "config" ? nonContinous : undefined}
+        {activeTab === "config" ? <nonContinous/> : undefined}
       </div>
       {activeTab === "config" ? undefined : footerHTML}
 

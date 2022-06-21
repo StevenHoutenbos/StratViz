@@ -52,13 +52,20 @@ function App() {
     setConfig({tabsState});
   }
 
+  function random_rgba() {
+    let o = Math.round, r = Math.random, s = 255;
+    return 'rgb(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ')';
+  }
+
+var color = random_rgba();
+
   return (
     <Tabs setTabName={setTabName} addTab={addTab}>
       {config.tabs.map((tab) => {
         return (
           <div label={tab.tabName} tabId={tab._uid}>
             <div className='gridContainer'>
-              {tab.graphs.map(graph => <PlotContent plotName = {graph.graphName}/>)}
+              {tab.graphs.map(graph => <PlotContent plotName={graph.graphName} graphColor={random_rgba()}/>)}
             </div>
           </div>
         )

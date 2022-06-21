@@ -73,43 +73,14 @@ function PlotContent(props) {
         name: "Motor Power",
         x: x,
         y: y,
-        line: { color: '#17BECF' }
+        line: { color: props.graphColor }
     }
 
     let styling = {
         title: "Motor Power",
         xaxis: {
-            autorange: true,
-            range: ["15/06/2022 20:33:20", "15/06/2022 20:41:20"],
-            rangeselector: {
-                buttons: [
-                    {
-                        count: 1,
-                        label: '1h',
-                        step: 'hour',
-                        stepmode: 'backward'
-                    },
-                    {
-                        count: 6,
-                        label: '6h',
-                        step: 'hour',
-                        stepmode: 'backward'
-                    },
-                    {
-                        count: 12,
-                        label: '12h',
-                        step: 'hours',
-                        stepmode: 'backward'
-                    },
-                    {
-                        count: 24,
-                        label: '24h',
-                        step: 'hour',
-                        stepmode: 'backward'
-                    },
-                    { step: 'all' }
-                ]
-            },
+            autorange: false,
+            range: ["15/06/2022 20:35:20", "15/06/2022 20:38:20"],
             rangeslider: { range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"] },
             type: 'datetime'
         },
