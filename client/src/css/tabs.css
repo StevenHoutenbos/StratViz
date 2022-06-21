@@ -151,26 +151,34 @@ body{
 }
 
 
-.plotMenuGridContainer{
-  margin-top: 28px;
+.plotMenuItem{
   display: grid;
   grid-template-columns: 2fr 2fr 1.5fr 20px ;
-  height: 100%;
 }
 
-.plotMenuGridTitleWrapper{
-  display: contents;
+.plotMenuItem > div{
+  display: flex;
+  align-items: center;
 }
 
-.plotMenuGridTitleWrapper > div {
+.plotMenuItem:first-child{
+  margin-bottom: 15px;
   font-weight: bold;
-  margin-bottom: 10px;
+}
+
+.signalContainer{
+  margin-top: 40px;
 }
 
 .searchbar{
   width: 100%;
   margin-top: 40px !important;
   margin-bottom: 20px !important;
+}
+
+.dot{
+  border-radius: 50%;
+  margin-right: 15px;
 }
 
 .plot{

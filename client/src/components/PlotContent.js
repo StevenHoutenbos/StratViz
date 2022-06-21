@@ -14,10 +14,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import HistoryIcon from '@mui/icons-material/History';
 import { useElementSize } from 'usehooks-ts';
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-//import * as socketData from '../index.js';
-import signals from '../messages.json'
+import signals from '../messages.json';
+import Signal from "./Signal";
 
 const SearchBar = ({ setSearchQuery }) => (
     <form>
@@ -204,33 +202,25 @@ function PlotContent(props) {
                         <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={() => setSelectedBtn(2)}>Stella</Button>
                         <Button color={selectedBtn === 3 ? "secondary" : "primary"} onClick={() => setSelectedBtn(3)}>Vie</Button>
                     </ButtonGroup>
-                    <div className="plotMenuGridContainer">
-                        <div className="plotMenuGridTitleWrapper">
+
+                    <div className="signalContainer">
+                        <div className="plotMenuItem bold">
                             <div>Sensor</div>
                             <div>Post-processing</div>
                             <div>Color</div>
                             <div></div>
                         </div>
-                        <div>Dit is tekst</div>
-                        <div>Dit is tekst</div>
-                        <div>Dit is tekst</div>
-                        <div>
-                            <RemoveIcon />
+                        <Signal signalName='hoi' />
+                        <Signal signalName='doei' />
+                        <Signal signalName='goeiemorgen' />
+                        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                        <div style={{ padding: 3 }}>
+                            {dataFiltered.map((d) => (
+                                <div key={d.id}>
+                                    {d}
+                                </div>
+                            ))}
                         </div>
-                        <div>Dit is tekst</div>
-                        <div>Dit is tekst</div>
-                        <div>Dit is tekst</div>
-                        <div>
-                            <RemoveIcon />
-                        </div>
-                    </div>
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <div style={{ padding: 3 }}>
-                        {dataFiltered.map((d) => (
-                            <div key={d.id}>
-                                {d}
-                            </div>
-                        ))}
                     </div>
                 </DialogContent>
                 <DialogActions>
