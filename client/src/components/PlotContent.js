@@ -29,31 +29,13 @@ function PlotContent(props) {
         setOpen(false);
     };
 
-    // Dynamic JSON data
-    const plotData = socketData.dataEntry;
-    console.log(plotData);
-
-    // Static JSON object definition
-    const myJSON1 = '{"timestamp":"15/06/2022 20:33:20", "value":30}';
-    const myObj1 = JSON.parse(myJSON1);
-    const myJSON2 = '{"timestamp":"15/06/2022 20:34:20", "value":12}';
-    const myObj2 = JSON.parse(myJSON2);
-    const myJSON3 = '{"timestamp":"15/06/2022 20:35:20", "value":72}';
-    const myObj3 = JSON.parse(myJSON3);
-    const myJSON4 = '{"timestamp":"15/06/2022 20:36:20", "value":16}';
-    const myObj4 = JSON.parse(myJSON4);
-    const myJSON5 = '{"timestamp":"15/06/2022 20:37:20", "value":2}';
-    const myObj5 = JSON.parse(myJSON5);
-    const myJSON6 = '{"timestamp":"15/06/2022 20:38:20", "value":29}';
-    const myObj6 = JSON.parse(myJSON6);
-    const myJSON7 = '{"timestamp":"15/06/2022 20:39:20", "value":41}';
-    const myObj7 = JSON.parse(myJSON7);
-    const myJSON8 = '{"timestamp":"15/06/2022 20:40:20", "value":35}';
-    const myObj8 = JSON.parse(myJSON8);
-    const myJSON9 = '{"timestamp":"15/06/2022 20:41:20", "value":29}';
-    const myObj9 = JSON.parse(myJSON9);
-
-    const data = [myObj1, myObj2, myObj3, myObj4, myObj5, myObj6, myObj7, myObj8, myObj9];
+    let data = [JSON.parse('{"timestamp":"' + new Date(2019, 1, 2).toDateString() + '", "value":' + 40 + '}')];
+    for (let i = 1; i < 200; i++) {
+        let date = new Date(2019, 1, 2+i);
+        let string = "" + date.getMonth() + "/" + date.getDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + ":" + date.getUTCSeconds();
+        data.unshift(JSON.parse('{"timestamp":"' + date + '", "value":' + String(data[0].value+((Math.random()-0.5)*10)) + '}'));
+    }
+    console.log(data);
     // If the connection to the database works, all we should need to do is switch from the line above to
     // const data = plotData
 
@@ -70,19 +52,20 @@ function PlotContent(props) {
         type: "scatter",
         fill: "tozeroy",
         mode: "lines",
-        name: "Motor Power",
+        name: props.plotName,
         x: x,
         y: y,
         line: { color: props.graphColor }
     }
 
     let styling = {
-        title: "Motor Power",
+        title: props.plotName,
         xaxis: {
             autorange: false,
-            range: ["15/06/2022 20:35:20", "15/06/2022 20:38:20"],
-            rangeslider: { range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"] },
-            type: 'datetime'
+            range: [new Date(2019, 1, 100).toDateString(), new Date(2019, 1, 105).toDateString()],
+            rangeslider: { range: [new Date(2019, 1, 100).toDateString(), new Date(2019, 1, 105).toDateString()] },
+            type: 'datetime',
+            tickformat: '%d %B (%a)\n %Y'
         },
         yaxis: {
             autorange: true,

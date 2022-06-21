@@ -57,8 +57,6 @@ function App() {
     return 'rgb(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ')';
   }
 
-var color = random_rgba();
-
   return (
     <Tabs setTabName={setTabName} addTab={addTab}>
       {config.tabs.map((tab) => {
