@@ -170,3 +170,23 @@ body, #app, #app>div{
   border-radius: 20px;
 }
 
+.plotMenuGridContainer{
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr 20px ;
+  height: 100%;
+}
+
+.plotMenuGridTitleWrapper{
+  display: contents;
+}
+
+.plotMenuGridTitleWrapper > div {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.plot{
+  height: min-content;
+  width: max-content;
+}
