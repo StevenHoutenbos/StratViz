@@ -19,6 +19,7 @@ body, #app, #app>div{
   padding-left: 0;
   margin: 0px;
   background: #ccc;
+  flex: 40px 0 auto;
 }
 
 .tab-list-item {
@@ -68,7 +69,7 @@ body, #app, #app>div{
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   grid-gap: 14px;
-  height: 100%;
+  height: 90vh;
 }
 
 .ncGridContainer{
@@ -83,10 +84,6 @@ body, #app, #app>div{
 .tab-content{
   flex: 1 1 auto;
   padding: 14px;
-}
-
-.footer{
-  flex: 0 1 40px;
 }
 
 .gridContainer > div {
@@ -136,18 +133,26 @@ body, #app, #app>div{
   overflow: hidden;
 }
 
+.timeModeButton{
+  position: absolute !important;
+  top: 70px;
+  right: 20px;
+  transition: opacity 1s ease-out;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .plotContainer{
   position: relative;
-  /* overflow: hidden; */
+  overflow: hidden;
   border-radius: 20px;
 }
 
-.plotContainer:hover > .editButton{
+.plotContainer:hover > .editButton, .plotContainer:hover > .timeModeButton{
   opacity: 1;
   height: auto;
 }
-
-.js-plotly-plot .plotly .modebar{left: 40%}
 
 .plotMenuGridContainer{
   margin-top: 28px;

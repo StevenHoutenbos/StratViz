@@ -10,15 +10,25 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import EditIcon from '@mui/icons-material/Edit';
-import RemoveIcon from '@mui/icons-material/Remove'
+import RemoveIcon from '@mui/icons-material/Remove';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import HistoryIcon from '@mui/icons-material/History';
+import { useElementSize } from 'usehooks-ts'
 //import * as socketData from '../index.js';
 
 const primary = teal[500];
 
 function PlotContent(props) {
 
+
     const [open, setOpen] = React.useState(false);
     const [selectedBtn, setSelectedBtn] = React.useState(1);
+    const [historic, setHistoric] = React.useState(false);
+
+    const [containerRef, { width, height }] = useElementSize();
+
+    const historicButton = <TimelineIcon/>
+    const realtimeButton = <HistoryIcon/>
 
     const activeColor = teal[500]
 
@@ -29,6 +39,10 @@ function PlotContent(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handleTimeMode = () => {
+        setHistoric(historic => !historic);
+    }
 
     // Dynamic JSON data
     //const plotData = socketData.data;
@@ -118,26 +132,25 @@ function PlotContent(props) {
             range: [0, 100],
             type: "linear"
         },
+        width: width,
+        height: height,
         autosize: true,
         useResizeHandler: true,
         className: "plotGraph",
-        height: 300,
         margin: {
-            l: 50,
+            l: 30,
             r: 10,
             b: 10,
-            t: 30,
-            pad: 15
-          }
+            t: 10,
+            pad: 5
+          },
     };
-
-    // let config= {{responsive: true}}
 
     // console.log(trace.x);
 
 
     return (
-        <div class="plotContainer">
+        <div class="plotContainer" ref={containerRef}>
             <Plot
                     data={[trace]}
                     layout={styling}
@@ -147,6 +160,9 @@ function PlotContent(props) {
                     />
                 <Button variant="contained" onClick={handleClickOpen} className="editButton">
                     <EditIcon/>
+                </Button>
+                <Button variant="contained" onClick={handleTimeMode} className="timeModeButton">
+                    {historic ? historicButton : realtimeButton}
                 </Button>
                 <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
                     <DialogTitle>{props.plotName}</DialogTitle>
