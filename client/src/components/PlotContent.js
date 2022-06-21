@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import EditIcon from '@mui/icons-material/Edit';
-//import * as socketData from '../index.js';
+import * as socketData from '../index.js';
 
 const primary = teal[500];
 
@@ -30,9 +30,8 @@ function PlotContent(props) {
     };
 
     // Dynamic JSON data
-    //const plotData = socketData.data;
-    //console.log("test");
-    //console.log(plotData);
+    const plotData = socketData.dataEntry;
+    console.log(plotData);
 
     // Static JSON object definition
     const myJSON1 = '{"timestamp":"15/06/2022 20:33:20", "value":30}';
@@ -61,7 +60,7 @@ function PlotContent(props) {
     let x = [];
     let y = [];
 
-    for (let i=0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         x.push(data[i].timestamp);
         // TODO: Switch to actual signal name when connection is up
         y.push(data[i].value);
@@ -74,7 +73,7 @@ function PlotContent(props) {
         name: "Motor Power",
         x: x,
         y: y,
-        line: {color: '#17BECF'}
+        line: { color: '#17BECF' }
     }
 
     let styling = {
@@ -82,35 +81,37 @@ function PlotContent(props) {
         xaxis: {
             autorange: true,
             range: ["15/06/2022 20:33:20", "15/06/2022 20:41:20"],
-            rangeselector: {buttons: [
-                {
-                  count: 1,
-                  label: '1h',
-                  step: 'hour',
-                  stepmode: 'backward'
-                },
-                {
-                  count: 6,
-                  label: '6h',
-                  step: 'hour',
-                  stepmode: 'backward'
-                },
-                {
-                    count: 12,
-                    label: '12h',
-                    step: 'hours',
-                    stepmode: 'backward'
-                  },
-                  {
-                    count: 24,
-                    label: '24h',
-                    step: 'hour',
-                    stepmode: 'backward'
-                  },
-                {step: 'all'}
-              ]},
-              rangeslider: {range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"]},
-              type: 'datetime'
+            rangeselector: {
+                buttons: [
+                    {
+                        count: 1,
+                        label: '1h',
+                        step: 'hour',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 6,
+                        label: '6h',
+                        step: 'hour',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 12,
+                        label: '12h',
+                        step: 'hours',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 24,
+                        label: '24h',
+                        step: 'hour',
+                        stepmode: 'backward'
+                    },
+                    { step: 'all' }
+                ]
+            },
+            rangeslider: { range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"] },
+            type: 'datetime'
         },
         yaxis: {
             autorange: true,
@@ -128,30 +129,30 @@ function PlotContent(props) {
     return (
         <div class="plotContainer">
             <Plot
-                    data={[trace]}
-                    layout={styling}
-                    />
-                <Button variant="outlined" onClick={handleClickOpen} class="editButton" style={{position: "relative", top: "-210px", borderRadius: "10px"}}>
-                    <EditIcon/>
-                </Button>
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>{props.plotName}</DialogTitle>
-                    <DialogContent>
-                        <ButtonGroup disableElevation variant="contained" color="primary">
-                            <Button color={selectedBtn === 1 ? "secondary" : "primary"} onClick={() => setSelectedBtn(1)}>Lux</Button>
-                            <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={() => setSelectedBtn(2)}>Stella</Button>
-                            <Button color={selectedBtn === 3 ? "secondary" : "primary"} onClick={() => setSelectedBtn(3)}>Vie</Button>
-                        </ButtonGroup>
-                        <DialogContentText>
-                            Here we will display options for the plot we want to edit.
-                        </DialogContentText>
+                data={[trace]}
+                layout={styling}
+            />
+            <Button variant="outlined" onClick={handleClickOpen} class="editButton" style={{ position: "relative", top: "-210px", borderRadius: "10px" }}>
+                <EditIcon />
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>{props.plotName}</DialogTitle>
+                <DialogContent>
+                    <ButtonGroup disableElevation variant="contained" color="primary">
+                        <Button color={selectedBtn === 1 ? "secondary" : "primary"} onClick={() => setSelectedBtn(1)}>Lux</Button>
+                        <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={() => setSelectedBtn(2)}>Stella</Button>
+                        <Button color={selectedBtn === 3 ? "secondary" : "primary"} onClick={() => setSelectedBtn(3)}>Vie</Button>
+                    </ButtonGroup>
+                    <DialogContentText>
+                        Here we will display options for the plot we want to edit.
+                    </DialogContentText>
 
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleClose}>Save</Button>
-                    </DialogActions>
-                </Dialog>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Save</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

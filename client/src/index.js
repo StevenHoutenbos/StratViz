@@ -3,12 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import io from 'socket.io-client';
 
-//let data;
-//export {data};
+let dataEntry;
+export { dataEntry };
 
-const { io, connect } = require('socket.io-client');
-const socket = io('http://localhost:3001');
+const socket = io('http://localhost:4000');
+
+socket.on("dataevent", (data) => {
+  console.log(data);
+  dataEntry = data;
+})
 
 socket.on("connect", () => {
   console.log("Connected");
