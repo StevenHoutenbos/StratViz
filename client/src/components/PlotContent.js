@@ -111,7 +111,6 @@ function PlotContent(props) {
               ]},
               rangeslider: {range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"]},
               type: 'datetime', 
-              ticklabeloverflow: 'hide past div',
               ticks: ''
         },
         yaxis: {
@@ -125,7 +124,7 @@ function PlotContent(props) {
         height: 300,
         margin: {
             l: 50,
-            r: 0,
+            r: 10,
             b: 10,
             t: 30,
             pad: 15

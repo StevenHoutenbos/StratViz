@@ -138,7 +138,7 @@ body, #app, #app>div{
 
 .plotContainer{
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   border-radius: 20px;
 }
 
