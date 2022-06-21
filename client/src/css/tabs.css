@@ -71,23 +71,6 @@ body, #app, #app>div{
   height: 100%;
 }
 
-.ncGridContainer{
-  display: grid;
-  grid-template-columns: auto 1fr 1fr;
-}
-
-.ncGridContainer > div{
-  padding-right: 20px;
-}
-
-
-.card{
-  border-radius: 10px;
-  background: white;
-  box-shadow: 0px 0px 10px #ddd;
-  padding: 20px;
-}
-
 .tab-content{
   flex: 1 1 auto;
   padding: 14px;
@@ -138,6 +121,10 @@ body, #app, #app>div{
   position: absolute !important;
   top: 20px;
   right: 20px;
+  transition: opacity 1s ease-out;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 .plotContainer{
@@ -146,47 +133,10 @@ body, #app, #app>div{
   border-radius: 20px;
 }
 
-.editButton{
-  position: absolute !important;
-  top: 20px;
-  right: 20px;
+.plotContainer:hover > .editButton{
+  opacity: 1;
+  height: auto;
 }
 
-.plotContainer{
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-}
+.js-plotly-plot .plotly .modebar{left: 40%}
 
-.editButton{
-  position: absolute !important;
-  top: 20px;
-  right: 20px;
-}
-
-.plotContainer{
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-}
-
-.plotMenuGridContainer{
-  margin-top: 28px;
-  display: grid;
-  grid-template-columns: 2fr 2fr 1.5fr 20px ;
-  height: 100%;
-}
-
-.plotMenuGridTitleWrapper{
-  display: contents;
-}
-
-.plotMenuGridTitleWrapper > div {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.plot{
-  height: min-content;
-  width: max-content;
-}

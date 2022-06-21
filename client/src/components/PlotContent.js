@@ -142,6 +142,8 @@ function PlotContent(props) {
             <Plot
                     data={[trace]}
                     layout={styling}
+                    config={{"displaylogo": false,
+                            responsive: true}}
 
                     />
                 <Button variant="contained" onClick={handleClickOpen} className="editButton">
