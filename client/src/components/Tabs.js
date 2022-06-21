@@ -109,28 +109,6 @@ function Tabs(props) {
 
   const nonContinous = <NonContinous/>
 
-  const footerHTML =
-    <div className='footer'>
-      <div className='timeAdjustment'>
-        <ButtonGroup disableElevation className='buttonGroup' variant="contained" color="primary">
-            <Button style={{height: '30px'}} color={selectedBtn === 1 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(1)}><TimelineIcon/></Button>
-            <Button style={{height: '30px'}} color={selectedBtn === 2 ? "secondary" : "primary"} onClick={()=>{setSelectedBtn(2); setValue([value[1], maxSliderVal])}}><HistoryIcon/></Button>
-        </ButtonGroup>
-        <div className='sliderWrapper'>
-          <PrettoSlider
-            min={0}
-            max={maxSliderVal}
-            getAriaLabel={() => 'Temperature range'}
-            value={value} 
-            onChange={handleChange}
-            valueLabelDisplay="auto"
-            getAriaValueText={valuetext}
-            disableSwap
-          />
-        </div>
-      </div>
-    </div>
-
   return (
     <div className="tabs">
       <ol className="tab-list">
@@ -174,9 +152,6 @@ function Tabs(props) {
         })}
         {activeTab === "config" ? nonContinous : undefined}
       </div>
-      {activeTab === "config" ? undefined : footerHTML}
-
-
     </div>
   )
 }
