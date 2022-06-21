@@ -13,13 +13,45 @@ import EditIcon from '@mui/icons-material/Edit';
 import RemoveIcon from '@mui/icons-material/Remove';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import HistoryIcon from '@mui/icons-material/History';
-import { useElementSize } from 'usehooks-ts'
+import { useElementSize } from 'usehooks-ts';
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
 //import * as socketData from '../index.js';
+import signals from '../messages.json'
 
-const primary = teal[500];
+const SearchBar = ({ setSearchQuery }) => (
+    <form>
+        <TextField
+            id="search-bar"
+            className="searchbar"
+            onInput={(e) => {
+                setSearchQuery(e.target.value);
+            }}
+            label="Enter signal name"
+            variant="outlined"
+            placeholder="Search..."
+        />
+    </form>
+);
+
+const filterData = (query, data) => {
+    if (!query) {
+        return data;
+    } else {
+        return data.filter((d) => d.toLowerCase().includes(query.toLowerCase()));
+    }
+};
 
 function PlotContent(props) {
 
+    const searchData = [];
+
+    signals.forEach(signal => {
+        searchData.push(signal.Name)
+    });
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const dataFiltered = filterData(searchQuery, searchData);
 
     const [open, setOpen] = React.useState(false);
     const [selectedBtn, setSelectedBtn] = React.useState(1);
@@ -29,8 +61,6 @@ function PlotContent(props) {
 
     const historicButton = <TimelineIcon />
     const realtimeButton = <HistoryIcon />
-
-    const activeColor = teal[500]
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -43,11 +73,6 @@ function PlotContent(props) {
     const handleTimeMode = () => {
         setHistoric(historic => !historic);
     }
-
-    // Dynamic JSON data
-    //const plotData = socketData.data;
-    //console.log("test");
-    //console.log(plotData);
 
     // Static JSON object definition
     const myJSON1 = '{"timestamp":"15/06/2022 20:33:20", "value":30}';
@@ -199,13 +224,14 @@ function PlotContent(props) {
                             <RemoveIcon />
                         </div>
                     </div>
-                    <TextField
-                        fullWidth
-                        id="filled-search"
-                        label="Search field"
-                        type="search"
-                        sx={{ marginTop: "20px" }}
-                    />
+                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    <div style={{ padding: 3 }}>
+                        {dataFiltered.map((d) => (
+                            <div key={d.id}>
+                                {d}
+                            </div>
+                        ))}
+                    </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
