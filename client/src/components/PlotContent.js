@@ -27,8 +27,8 @@ function PlotContent(props) {
 
     const [containerRef, { width, height }] = useElementSize();
 
-    const historicButton = <TimelineIcon/>
-    const realtimeButton = <HistoryIcon/>
+    const historicButton = <TimelineIcon />
+    const realtimeButton = <HistoryIcon />
 
     const activeColor = teal[500]
 
@@ -76,7 +76,7 @@ function PlotContent(props) {
     let x = [];
     let y = [];
 
-    for (let i=0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         x.push(data[i].timestamp);
         // TODO: Switch to actual signal name when connection is up
         y.push(data[i].value);
@@ -89,43 +89,45 @@ function PlotContent(props) {
         name: "Motor Power",
         x: x,
         y: y,
-        line: {color: '#17BECF'}
+        line: { color: '#17BECF' }
     }
 
     let styling = {
         xaxis: {
             autorange: true,
             range: ["15/06/2022 20:33:20", "15/06/2022 20:41:20"],
-            rangeselector: {buttons: [
-                {
-                  count: 1,
-                  label: '1h',
-                  step: 'hour',
-                  stepmode: 'backward'
-                },
-                {
-                  count: 6,
-                  label: '6h',
-                  step: 'hour',
-                  stepmode: 'backward'
-                },
-                {
-                    count: 12,
-                    label: '12h',
-                    step: 'hours',
-                    stepmode: 'backward'
-                  },
-                  {
-                    count: 24,
-                    label: '24h',
-                    step: 'hour',
-                    stepmode: 'backward'
-                  },
-                {step: 'all'}
-              ]},
-              rangeslider: {range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"]},
-              type: 'datetime', 
-              ticks: ''
+            rangeselector: {
+                buttons: [
+                    {
+                        count: 1,
+                        label: '1h',
+                        step: 'hour',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 6,
+                        label: '6h',
+                        step: 'hour',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 12,
+                        label: '12h',
+                        step: 'hours',
+                        stepmode: 'backward'
+                    },
+                    {
+                        count: 24,
+                        label: '24h',
+                        step: 'hour',
+                        stepmode: 'backward'
+                    },
+                    { step: 'all' }
+                ]
+            },
+            rangeslider: { range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"] },
+            type: 'datetime',
+            ticks: ''
         },
         yaxis: {
             autorange: true,
@@ -133,7 +135,7 @@ function PlotContent(props) {
             type: "linear"
         },
         width: width,
-        height: height,
+        height: height + 10,
         autosize: true,
         useResizeHandler: true,
         className: "plotGraph",
@@ -143,7 +145,7 @@ function PlotContent(props) {
             b: 10,
             t: 10,
             pad: 5
-          },
+        },
     };
 
     // console.log(trace.x);
@@ -151,60 +153,65 @@ function PlotContent(props) {
 
     return (
         <div class="plotContainer" ref={containerRef}>
-            <Plot
-                    data={[trace]}
-                    layout={styling}
-                    config={{"displaylogo": false,
-                            responsive: true}}
-
-                    />
-                <Button variant="contained" onClick={handleClickOpen} className="editButton">
-                    <EditIcon/>
+            <div className="plotTitleContainer">
+                <Button variant="text" onClick={handleClickOpen} className="plotTitleButton">
+                    <EditIcon />
                 </Button>
-                <Button variant="contained" onClick={handleTimeMode} className="timeModeButton">
+                <p>{props.plotName}</p>
+                <Button variant="text" onClick={handleTimeMode} className="plotTitleButton">
                     {historic ? historicButton : realtimeButton}
                 </Button>
-                <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
-                    <DialogTitle>{props.plotName}</DialogTitle>
-                    <DialogContent>
-                        <ButtonGroup disableElevation variant="contained" color="primary">
-                            <Button color={selectedBtn === 1 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(1)}>Lux</Button>
-                            <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(2)}>Stella</Button>
-                            <Button color={selectedBtn === 3 ? "secondary" : "primary"} onClick={()=>setSelectedBtn(3)}>Vie</Button>
-                        </ButtonGroup>
-                        <div className="plotMenuGridContainer">
-                            <div className="plotMenuGridTitleWrapper">
-                                <div>Sensor</div>
-                                <div>Post-processing</div>
-                                <div>Color</div>
-                                <div></div>
-                            </div>
-                            <div>Dit is tekst</div>
-                            <div>Dit is tekst</div>
-                            <div>Dit is tekst</div>
-                            <div>
-                                <RemoveIcon/>
-                            </div>
-                            <div>Dit is tekst</div>
-                            <div>Dit is tekst</div>
-                            <div>Dit is tekst</div>
-                            <div>
-                                <RemoveIcon/>
-                            </div>
+            </div>
+            <Plot
+                data={[trace]}
+                layout={styling}
+                config={{
+                    "displaylogo": false,
+                    responsive: true
+                }}
+
+            />
+            <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
+                <DialogTitle>{props.plotName}</DialogTitle>
+                <DialogContent>
+                    <ButtonGroup disableElevation variant="contained" color="primary">
+                        <Button color={selectedBtn === 1 ? "secondary" : "primary"} onClick={() => setSelectedBtn(1)}>Lux</Button>
+                        <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={() => setSelectedBtn(2)}>Stella</Button>
+                        <Button color={selectedBtn === 3 ? "secondary" : "primary"} onClick={() => setSelectedBtn(3)}>Vie</Button>
+                    </ButtonGroup>
+                    <div className="plotMenuGridContainer">
+                        <div className="plotMenuGridTitleWrapper">
+                            <div>Sensor</div>
+                            <div>Post-processing</div>
+                            <div>Color</div>
+                            <div></div>
                         </div>
-                        <TextField
+                        <div>Dit is tekst</div>
+                        <div>Dit is tekst</div>
+                        <div>Dit is tekst</div>
+                        <div>
+                            <RemoveIcon />
+                        </div>
+                        <div>Dit is tekst</div>
+                        <div>Dit is tekst</div>
+                        <div>Dit is tekst</div>
+                        <div>
+                            <RemoveIcon />
+                        </div>
+                    </div>
+                    <TextField
                         fullWidth
                         id="filled-search"
                         label="Search field"
                         type="search"
-                        sx={{marginTop: "20px"}}
-                        />
-                    </DialogContent>
-                    <DialogActions>
+                        sx={{ marginTop: "20px" }}
+                    />
+                </DialogContent>
+                <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleClose}>Save</Button>
-                    </DialogActions>
-                </Dialog>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

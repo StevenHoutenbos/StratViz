@@ -127,24 +127,21 @@ body{
   font-size: 14px;
 }
 
-.editButton{
-  position: absolute !important;
-  top: 20px;
-  right: 20px;
-  transition: opacity 1s ease-out;
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
+.plotTitleContainer{
+  width: 100%;
+  height: 36px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.timeModeButton{
-  position: absolute !important;
-  top: 70px;
-  right: 20px;
-  transition: opacity 1s ease-out;
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
+.plotTitleContainer > p {
+  margin: 20px;
+}
+
+.plotTitleButton{
+  color: #000 !important;
 }
 
 .plotContainer{
@@ -153,10 +150,6 @@ body{
   border-radius: 20px;
 }
 
-.plotContainer:hover > .editButton, .plotContainer:hover > .timeModeButton{
-  opacity: 1;
-  height: auto;
-}
 
 .plotMenuGridContainer{
   margin-top: 28px;
