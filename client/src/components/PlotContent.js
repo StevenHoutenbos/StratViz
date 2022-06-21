@@ -78,7 +78,6 @@ function PlotContent(props) {
     }
 
     let styling = {
-        title: "Motor Power",
         xaxis: {
             autorange: true,
             range: ["15/06/2022 20:33:20", "15/06/2022 20:41:20"],
@@ -130,8 +129,9 @@ function PlotContent(props) {
             <Plot
                     data={[trace]}
                     layout={styling}
+
                     />
-                <Button variant="outlined" onClick={handleClickOpen} class="editButton" style={{position: "relative", top: "-210px", borderRadius: "10px"}}>
+                <Button variant="contained" onClick={handleClickOpen} className="editButton">
                     <EditIcon/>
                 </Button>
                 <Dialog open={open} onClose={handleClose}>

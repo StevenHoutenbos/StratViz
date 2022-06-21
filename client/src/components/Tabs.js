@@ -9,6 +9,7 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import HistoryIcon from '@mui/icons-material/History';
 import { Icon } from '@mui/material';
 import { borderRadius } from '@mui/system';
+import NonContinous from './NonContinuous'
 
 function valuetext(value) {
   return `${value}°C`;
@@ -106,6 +107,8 @@ function Tabs(props) {
     addTab(tabId);
   }
 
+  const nonContinous = <NonContinous/>
+
   const footerHTML =
     <div className='footer'>
       <div className='timeAdjustment'>
@@ -169,7 +172,7 @@ function Tabs(props) {
           if (child.props.tabId !== activeTab) return undefined;
           return child.props.children;
         })}
-        {/* {activeTab === "config" ? nonContinous : undefined} */}
+        {activeTab === "config" ? nonContinous : undefined}
       </div>
       {activeTab === "config" ? undefined : footerHTML}
 
