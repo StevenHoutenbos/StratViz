@@ -110,7 +110,9 @@ function PlotContent(props) {
                 {step: 'all'}
               ]},
               rangeslider: {range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"]},
-              type: 'datetime'
+              type: 'datetime', 
+              ticklabeloverflow: 'hide past div',
+              ticks: ''
         },
         yaxis: {
             autorange: true,
@@ -119,8 +121,18 @@ function PlotContent(props) {
         },
         autosize: true,
         useResizeHandler: true,
-        className: "plotGraph"
+        className: "plotGraph",
+        height: 300,
+        margin: {
+            l: 50,
+            r: 0,
+            b: 10,
+            t: 30,
+            pad: 15
+          }
     };
+
+    // let config= {{responsive: true}}
 
     // console.log(trace.x);
 
