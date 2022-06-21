@@ -214,7 +214,7 @@ function PlotContent(props) {
                         <Signal signalName='doei' />
                         <Signal signalName='goeiemorgen' />
                         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                        <div style={{ padding: 3 }}>
+                        <div style={{ padding: 3 }} className="searchResults">
                             {dataFiltered.map((d) => (
                                 <div key={d.id}>
                                     {d}

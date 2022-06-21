@@ -176,6 +176,11 @@ body{
   margin-bottom: 20px !important;
 }
 
+.searchResults{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .dot{
   border-radius: 50%;
   margin-right: 15px;
