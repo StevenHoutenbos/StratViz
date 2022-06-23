@@ -47,14 +47,14 @@ function App() {
   }
 
   const addTab = (tabId) => {
-    var tabsState = {...config.tabs};
+    var tabsState = { ...config.tabs };
     tabsState.push(newTab(tabId));
-    setConfig({tabsState});
+    setConfig({ tabsState });
   }
 
   function random_rgba() {
     let o = Math.round, r = Math.random, s = 255;
-    return 'rgb(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ')';
+    return 'rgb(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ')';
   }
 
   return (
@@ -63,7 +63,7 @@ function App() {
         return (
           <div label={tab.tabName} tabId={tab._uid}>
             <div className='gridContainer'>
-              {tab.graphs.map(graph => <PlotContent plotName={graph.graphName} graphColor={random_rgba()}/>)}
+              {tab.graphs.map(graph => <PlotContent plotName={graph.graphName} graphColor={random_rgba()} />)}
             </div>
           </div>
         )

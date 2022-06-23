@@ -5,23 +5,24 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import io from 'socket.io-client';
 
-let dataEntry;
-export { dataEntry };
-
+// Create the socket instance as part of our sever
 const socket = io('http://localhost:4000');
 
 socket.on("dataevent", (data) => {
-  console.log(data);
-  dataEntry = data;
-})
+  // We receive the following data:
+  // data = {topic: "topic", key: "key", data: {data object}}
 
-socket.on("connect", () => {
-  console.log("Connected");
-})
+  // Now we need to send this data to some managing object/system that can forward the data to the right tab
+  // And then forwards the data to the right plot
+});
 
-socket.on("connect_error", (error) => {
-  console.log(`Error: ${error.message}`);
-})
+function subscribe(topic, key) {
+  socket.emit("client-subscribe", { topic, key });
+}
+
+function unsubscribe(topic, key) {
+  socket.emit("client-unsubscribe", { topic, key });
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -29,6 +30,13 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// Export the functions that allow components to subscribe/unsubscribe from topics
+// To import: import {subscribe, unsubscribe} from 'path/to/index.js'
+module.exports = {
+  subscribe,
+  unsubscribe
+};
 
 // socket.on("dataevent", (arg) => {
 //   //data = arg;
