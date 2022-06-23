@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
 import NonContinous from './NonContinuous'
 import TabContent from './TabContent';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { v4 as uuid } from 'uuid';
 
 function Tabs(props) {
 
   const [tabs, setTabs] = useState(props.config.tabs);
   const [activeTab, setActiveTab] = useState(props.config.tabs[0].tabId);
+
+  const uploadRef = React.useRef(null);
 
   let tabCounter = 0;
 
@@ -19,13 +24,13 @@ function Tabs(props) {
       plots: [{
         plotName: "new Plot",
         signals: []
-      },{
+      }, {
         plotName: "new Plot",
         signals: []
-      },{
+      }, {
         plotName: "new Plot",
         signals: []
-      },{
+      }, {
         plotName: "new Plot",
         signals: []
       },
@@ -94,6 +99,44 @@ function Tabs(props) {
     setTabs(newTabs);
   }
 
+  const downloadConfig = () => {
+
+    const file = new File([JSON.stringify(tabs)], 'config', {
+      type: 'text/plain',
+    })
+
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(file)
+
+    link.href = url
+    link.download = file.name
+    document.body.appendChild(link)
+    link.click()
+
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  }
+
+
+  const handleUploadClick = event => {
+    uploadRef.current.click();
+  }
+
+
+  // handle uploading files
+  const handleUploadFile = async (e) => {
+    e.preventDefault()
+    const reader = new FileReader()
+    reader.onload = async (e) => {
+      const text = (e.target.result)
+      console.log(tabs)
+      console.log(JSON.parse(text))
+      setTabs(JSON.parse(text))
+    };
+    reader.readAsText(e.target.files[0])
+  }
+
+
   const nonContinous = <NonContinous />
 
   return (
@@ -118,6 +161,14 @@ function Tabs(props) {
           <svg style={{ width: "14px", height: "14px", padding: "0px" }} viewBox="0 0 22 22">
             <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
           </svg>
+        </button>
+        <button id="downloadConfig" onMouseDown={downloadConfig}>
+          <CloudDownloadIcon />
+        </button>
+
+        <input type="file" style={{display: 'none'}} id="upload" ref={uploadRef} onChange={handleUploadFile} />
+        <button id="uploadConfig" onClick={handleUploadClick}>
+          <CloudUploadIcon />
         </button>
         <Tab
           activeTab={activeTab}

@@ -15,7 +15,6 @@ import signalsImport from '../messages.json';
 import Signal from "./Signal";
 
 const SearchBar = ({ setSearchQuery }) => (
-    <form>
         <TextField
             id="search-bar"
             className="searchbar"
@@ -26,7 +25,6 @@ const SearchBar = ({ setSearchQuery }) => (
             variant="outlined"
             placeholder="Search..."
         />
-    </form>
 );
 
 const filterData = (query, data) => {
@@ -71,6 +69,7 @@ function PlotContent(props) {
         }
     });
 
+    const [plotName, setPlotName] = useState(props.plotName)
     const [signals, setSignals] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -84,7 +83,7 @@ function PlotContent(props) {
 
 
     // Add useEffect to check state of updated signals
-    useEffect(() => {props.onChangePlot(props.plotName, signals)}, [signals]);
+    useEffect(() => {props.onChangePlot(plotName, signals)}, [signals]);
 
 
     const historicButton = <TimelineIcon />
@@ -139,6 +138,10 @@ function PlotContent(props) {
         // Set the newSignals array as the new array
         setSignals(newSignals);
 
+    }
+
+    const handleChangePlotName = (e) => {
+        setPlotName(e.target.value);
     }
 
     // Static JSON object definition
@@ -249,7 +252,7 @@ function PlotContent(props) {
                 <Button variant="text" onClick={handleClickOpen} className="plotTitleButton">
                     <EditIcon />
                 </Button>
-                <p>{props.plotName}</p>
+                <p>{plotName}</p>
                 <Button variant="text" onClick={handleTimeMode} className="plotTitleButton">
                     {historic ? historicButton : realtimeButton}
                 </Button>
@@ -264,7 +267,7 @@ function PlotContent(props) {
 
             />
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
-                <DialogTitle>{props.plotName}</DialogTitle>
+                <DialogTitle><TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName}/></DialogTitle>
                 <DialogContent>
                     <ButtonGroup disableElevation variant="contained" color="primary">
                         <Button color={selectedBtn === 1 ? "secondary" : "primary"} onClick={() => setSelectedBtn(1)}>Lux</Button>
@@ -298,8 +301,7 @@ function PlotContent(props) {
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Save</Button>
+                    <Button onClick={handleClose} type="submit">Close</Button>
                 </DialogActions>
             </Dialog>
         </div>
