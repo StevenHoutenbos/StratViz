@@ -1,59 +1,20 @@
 {
     "tabs": [{
-      "tabName": "Motor Power",
+      "tabName": "New tab",
       "tabId": "BUY6Drn9e1",
       "plots": [{
-          "plotName": "motor power",
-          "signals": [{
-            "signal": "Motor_Power_1",
-            "pp": "derivative",
-            "color": "blue"
-          }, {
-            "signal": "Motor_Power_2",
-            "pp": "derivative",
-            "color": "red"
-          }]
-        },
-        {
-          "plotName": "Solar energy",
-          "signals": [{
-            "signal": "solar_array_1",
-            "pp": "none",
-            "color": "orange"
-          }, {
-            "signal": "solar_array_2",
-            "pp": "none",
-            "color": "green"
-          }]
-        }
-      ]
-    }, {
-      "tabName": "second tab",
-      "tabId": "gJZoSLkfZV",
-      "plots": [{
-          "plotName": "motor power",
-          "signals": [{
-            "signal": "Motor_Power_1",
-            "pp": "derivative",
-            "color": "blue"
-          }, {
-            "signal": "Motor_Power_2",
-            "pp": "derivative",
-            "color": "red"
-          }]
-        },
-        {
-          "plotName": "Solar energy",
-          "signals": [{
-            "signal": "solar_array_1",
-            "pp": "none",
-            "color": "orange"
-          }, {
-            "signal": "solar_array_2",
-            "pp": "none",
-            "color": "green"
-          }]
-        }
+        "plotName": "new Plot",
+        "signals": []
+      }, {
+        "plotName": "new Plot",
+        "signals": []
+      }, {
+        "plotName": "new Plot",
+        "signals": []
+      }, {
+        "plotName": "new Plot",
+        "signals": []
+      }
       ]
     }]
   }
