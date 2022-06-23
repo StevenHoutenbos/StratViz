@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import RemoveIcon from '@mui/icons-material/Remove';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { height } from "@mui/system";
+import { PropTypes } from "prop-types";
 
 // define colors to choose from to use in plot
 const colors = [
@@ -12,13 +13,16 @@ const colors = [
 ]
 
 const postProcessings = [
-    'derivative', 'something else', 'i do not know'
+    'none', 'derivative', 'something else', 'i do not know'
 ]
 
 function Signal(props){
 
-    const [color, setColor] = React.useState('');
-    const [pp, setPP] = React.useState('');
+    const [color, setColor] = React.useState(props.color);
+    const [pp, setPP] = React.useState(props.pp);
+
+    useEffect(() => { props.onChangeSignal(props.signalName, pp, color) }, [color]);
+    useEffect(() => { props.onChangeSignal(props.signalName, pp, color) }, [pp]);
 
     const handleChangeColor = (event) => {
       setColor(event.target.value);
@@ -26,6 +30,7 @@ function Signal(props){
 
     const handleChangePP = (event) => {
         setPP(event.target.value);
+        props.onChangeSignal(props.signalName, pp, color)
       };
 
     return(
@@ -77,11 +82,24 @@ function Signal(props){
                     </Select>
                 </FormControl>
             </div>
-            <div>
-                <RemoveIcon />
+            <div onClick={() => props.onRemoveSignal(props.signalName)}>
+                <RemoveIcon/>
             </div>
         </div>
     )
+}
+
+Signal.propTypes = {
+    onRemoveSignal: PropTypes.func.isRequired,
+    onChangeSignal: PropTypes.func.isRequired,
+    signalName: PropTypes.string.isRequired,
+    pp: PropTypes.string.isRequired,
+    color: PropTypes.string,
+}
+
+Signal.defaultProps = {
+    pp: postProcessings[0],
+    color: colors[0],
 }
 
 export default Signal

@@ -3,30 +3,78 @@ import PropTypes from 'prop-types';
 import Tab from './Tab';
 import NonContinous from './NonContinuous'
 import TabContent from './TabContent';
+import { v4 as uuid } from 'uuid';
 
 function Tabs(props) {
 
   const [tabs, setTabs] = useState(props.config.tabs);
   const [activeTab, setActiveTab] = useState(props.config.tabs[0].tabId);
 
+  let tabCounter = 0;
+
+  const newTab = (tabId) => {
+    return {
+      tabName: "new tab",
+      tabId: tabId,
+      plots: [{
+        plotName: "new Plot",
+        signals: []
+      },{
+        plotName: "new Plot",
+        signals: []
+      },{
+        plotName: "new Plot",
+        signals: []
+      },{
+        plotName: "new Plot",
+        signals: []
+      },
+      ]
+    }
+  }
+
   const onClickTabItem = (tab) => {
     setActiveTab(tab);
   }
 
-  const changeTitleTabItem = (tabId, newTitle) => {
-    console.log("called onBlurTabItem! new value of " + tabId + " is: " + newTitle);
-    const { setTabName } = props;
-    setTabName(tabId, newTitle);
+  const handleChangeTabName = (tabId, newTitle) => {
+
+    // Find index of object we want to change
+    const tabIndex = tabs.findIndex((tab => tab.tabId == tabId));
+
+    // copy the original array, as to not mutate the original array
+    const newTabs = [...tabs];
+
+    // change the value that we want to change
+    newTabs[tabIndex].tabName = newTitle;
+
+    // Set the newSignals array as the new array
+    setTabs(newTabs);
   }
 
-  const deleteTab = (tabId) => {
-    console.log("ewa");
-    deleteTab(tabId);
+  const handleDeleteTab = (tabId) => {
+    // Find index of object we want to change
+    const tabIndex = tabs.findIndex((tab => tab.tabId == tabId));
+
+    // copy the original array, as to not mutate the original array
+    const newTabs = [...tabs];
+
+    // change the value that we want to change
+    newTabs.splice(tabIndex);
+
+    // Set the newSignals array as the new array
+    setTabs(newTabs);
   }
 
   const addTab = (tabId) => {
-    const {addTab} = props;
-    addTab(tabId);
+    // copy the original array, as to not mutate the original array
+    const newTabs = [...tabs];
+
+    // change the value that we want to change
+    newTabs.push(newTab(uuid()));
+
+    // Set the newSignals array as the new array
+    setTabs(newTabs);
   }
 
   // TODO: update comments
@@ -35,16 +83,12 @@ function Tabs(props) {
 
     // Find index of object we want to change
     const tabIndex = tabs.findIndex((tab => tab.tabId == tabId));
-    console.log('tabIndex is: ', tabIndex)
 
     // copy the original array, as to not mutate the original array
     const newTabs = [...tabs];
 
     // change the value that we want to change
     newTabs[tabIndex] = { tabName, tabId, plots };
-
-    // Send it to console for checking
-    console.log('tabs changed to: ', newTabs[tabIndex])
 
     // Set the newSignals array as the new array
     setTabs(newTabs);
@@ -55,9 +99,7 @@ function Tabs(props) {
   return (
     <div className="tabs">
       <ol className="tab-list">
-        {props.config.tabs.map((tab) => {
-          console.log(tab);
-
+        {tabs.map((tab) => {
           return (
             <Tab
               activeTab={activeTab}
@@ -65,8 +107,8 @@ function Tabs(props) {
               tabId={tab.tabId}
               label={tab.tabName}
               onClick={onClickTabItem}
-              changeTitle={changeTitleTabItem}
-              deleteTab={deleteTab}
+              onChangeTabName={handleChangeTabName}
+              onDelete={handleDeleteTab}
               float="left"
               editable="true"
             />
@@ -88,7 +130,7 @@ function Tabs(props) {
         />
       </ol>
       <div className="tab-content">
-        {props.config.tabs.map((tab) => {
+        {tabs.map((tab) => {
           if (tab.tabId !== activeTab) return undefined;
           return <TabContent tabName={tab.tabName} tabId={tab.tabId} plots={tab.plots} onChangeTabs={handleChangeTabs} />;
         })}

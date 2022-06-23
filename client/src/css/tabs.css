@@ -179,6 +179,15 @@ body{
 .searchResults{
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.searchResult{
+  cursor: pointer;
+  background-color: #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  overflow: hidden;
 }
 
 .dot{

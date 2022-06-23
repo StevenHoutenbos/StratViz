@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Plot from 'react-plotly.js';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
-import { teal } from "@mui/material/colors";
 import EditIcon from '@mui/icons-material/Edit';
-import RemoveIcon from '@mui/icons-material/Remove';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import HistoryIcon from '@mui/icons-material/History';
 import { useElementSize } from 'usehooks-ts';
-import signals from '../messages.json';
+import signalsImport from '../messages.json';
 import Signal from "./Signal";
 
 const SearchBar = ({ setSearchQuery }) => (
@@ -42,11 +39,39 @@ const filterData = (query, data) => {
 
 function PlotContent(props) {
 
+    // Initialize list of signals to be searched
     const searchData = [];
 
-    signals.forEach(signal => {
-        searchData.push(signal.Name)
+    // import all continuous signals so we can search trough them
+    signalsImport.forEach(signal => {
+
+        // check if a signals has at least 1 value that is continuous
+        if (!(signal["Data types"].includes("int") || signal["Data types"].includes("float"))) {
+
+            // create arrays for the datatypes and fieldnames contained in the signal
+            const dataTypesArr = signal["Data types"].split(',');
+            const fieldNamesArr = signal["Field names"].split(',');
+
+            // Check if the number of found datatypes and fieldnames match
+            if (dataTypesArr.length != fieldNamesArr.length) {
+                console.log('Arrays not of same size!')
+            } else {
+
+                // For every datatype-fieldname pair, check:
+                for (let i = 0; i < dataTypesArr.length; i++) {
+
+                    // Do we find a continuous signal? then:
+                    if (!dataTypesArr[i].includes("int") || !dataTypesArr[i].includes("float")) {
+
+                        // We push the signal name together with the fieldname to the searchlist
+                        searchData.push( signal.Name + " - " + fieldNamesArr[i])
+                    }
+                }
+            }
+        }
     });
+
+    const [signals, setSignals] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
     const dataFiltered = filterData(searchQuery, searchData);
@@ -56,6 +81,11 @@ function PlotContent(props) {
     const [historic, setHistoric] = React.useState(false);
 
     const [containerRef, { width, height }] = useElementSize();
+
+
+    // Add useEffect to check state of updated signals
+    useEffect(() => {props.onChangePlot(props.plotName, signals)}, [signals]);
+
 
     const historicButton = <TimelineIcon />
     const realtimeButton = <HistoryIcon />
@@ -70,6 +100,45 @@ function PlotContent(props) {
 
     const handleTimeMode = () => {
         setHistoric(historic => !historic);
+    }
+
+    const handleAddSignal = (e) => {
+
+        // Add a signal. default post processing and color are handled by the signal component.
+        const newSignals = signals.concat({signalName: e.target.value});
+
+        // Set newSignals to be the new signals array
+        setSignals(newSignals);
+    }
+
+    const handleRemoveSignal = (signalName) => {
+
+        // Filter the current signals array for the signalName we got, set it to a new array
+        const newSignals = signals.filter((obj) => {
+            return obj.signalName != signalName;
+        })
+
+        // Set newSignals to be the new signals array
+        setSignals(newSignals);
+    }
+
+    const handleChangeSignal = (signalName, pp, color) => {
+
+        // Find index of object we want to change
+        const signalIndex = signals.findIndex((signal => signal.signalName == signalName));
+        
+        // copy the original array, as to not mutate the original array
+        const newSignals = [...signals];
+
+        // change the value that we want to change
+        newSignals[signalIndex] = {signalName, pp, color};
+
+        // Send it to console for checking
+        console.log('signals changed to: ', newSignals[signalIndex])
+
+        // Set the newSignals array as the new array
+        setSignals(newSignals);
+
     }
 
     // Static JSON object definition
@@ -210,15 +279,20 @@ function PlotContent(props) {
                             <div>Color</div>
                             <div></div>
                         </div>
-                        <Signal signalName='hoi' />
-                        <Signal signalName='doei' />
-                        <Signal signalName='goeiemorgen' />
+
+                        {/* render list of added signals */}
+                        {signals.map(signal => {
+                            return(<Signal signalName={signal.signalName} pp={signal.pp} color={signal.color} onRemoveSignal={handleRemoveSignal} onChangeSignal={handleChangeSignal}/>)
+                        })}
+                        
+
+                        
                         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                         <div style={{ padding: 3 }} className="searchResults">
                             {dataFiltered.map((d) => (
-                                <div key={d.id}>
+                                <Button variant="contained" key={d.id} value={d} className="searchResult" onClick={handleAddSignal}>
                                     {d}
-                                </div>
+                                </Button>
                             ))}
                         </div>
                     </div>
