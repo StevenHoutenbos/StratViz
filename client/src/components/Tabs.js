@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
 import NonContinous from './NonContinuous'
+import TabContent from './TabContent';
 
 function Tabs(props) {
 
-  const [activeTab, setActiveTab] = useState(props.children[0].props.tabId);
-  const [value, setValue] = React.useState([20, 37]);
+  const [tabs, setTabs] = useState(props.config.tabs);
+  const [activeTab, setActiveTab] = useState(props.config.tabs[0].tabId);
 
   const onClickTabItem = (tab) => {
     setActiveTab(tab);
@@ -17,32 +18,52 @@ function Tabs(props) {
     const { setTabName } = props;
     setTabName(tabId, newTitle);
   }
-  
+
   const deleteTab = (tabId) => {
     console.log("ewa");
     deleteTab(tabId);
   }
 
   const addTab = (tabId) => {
-    const { addTab} = props;
+    const {addTab} = props;
     addTab(tabId);
   }
 
-  const nonContinous = <NonContinous/>
+  // TODO: update comments
+  // handle change of plot
+  const handleChangeTabs = (tabId, tabName, plots) => {
+
+    // Find index of object we want to change
+    const tabIndex = tabs.findIndex((tab => tab.tabId == tabId));
+    console.log('tabIndex is: ', tabIndex)
+
+    // copy the original array, as to not mutate the original array
+    const newTabs = [...tabs];
+
+    // change the value that we want to change
+    newTabs[tabIndex] = { tabName, tabId, plots };
+
+    // Send it to console for checking
+    console.log('tabs changed to: ', newTabs[tabIndex])
+
+    // Set the newSignals array as the new array
+    setTabs(newTabs);
+  }
+
+  const nonContinous = <NonContinous />
 
   return (
     <div className="tabs">
       <ol className="tab-list">
-        {props.children.map((child) => {
-          const { label, tabId } = child.props;
-
+        {props.config.tabs.map((tab) => {
+          console.log(tab);
 
           return (
             <Tab
               activeTab={activeTab}
-              key={label}
-              tabId={tabId}
-              label={label}
+              key={tab.tabId}
+              tabId={tab.tabId}
+              label={tab.tabName}
               onClick={onClickTabItem}
               changeTitle={changeTitleTabItem}
               deleteTab={deleteTab}
@@ -67,9 +88,9 @@ function Tabs(props) {
         />
       </ol>
       <div className="tab-content">
-        {props.children.map((child) => {
-          if (child.props.tabId !== activeTab) return undefined;
-          return child.props.children;
+        {props.config.tabs.map((tab) => {
+          if (tab.tabId !== activeTab) return undefined;
+          return <TabContent tabName={tab.tabName} tabId={tab.tabId} plots={tab.plots} onChangeTabs={handleChangeTabs} />;
         })}
         {activeTab === "nc" ? nonContinous : undefined}
       </div>
@@ -78,7 +99,7 @@ function Tabs(props) {
 }
 
 Tabs.propTypes = {
-    children: PropTypes.instanceOf(Array).isRequired,
+  children: PropTypes.instanceOf(Array).isRequired,
 }
 
 export default Tabs;
