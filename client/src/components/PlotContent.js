@@ -13,25 +13,26 @@ import HistoryIcon from '@mui/icons-material/History';
 import { useElementSize } from 'usehooks-ts';
 import signalsImport from '../messages.json';
 import Signal from "./Signal";
+import * as sio from "../index"
 
 const SearchBar = ({ setSearchQuery }) => (
-        <TextField
-            id="search-bar"
-            className="searchbar"
-            onInput={(e) => {
-                setSearchQuery(e.target.value);
-            }}
-            label="Enter signal name"
-            variant="outlined"
-            placeholder="Search..."
-        />
+    <TextField
+        id="search-bar"
+        className="searchbar"
+        onInput={(e) => {
+            setSearchQuery(e.target.value);
+        }}
+        label="Enter signal name"
+        variant="outlined"
+        placeholder="Search..."
+    />
 );
 
 const filterData = (query, data) => {
     if (!query) {
-        return data;
+        return data.splice(0, 20);
     } else {
-        return data.filter((d) => d.toLowerCase().includes(query.toLowerCase()));
+        return data.filter((d) => d.toLowerCase().startsWith(query.toLowerCase())).splice(0, 20);
     }
 };
 
@@ -44,7 +45,7 @@ function PlotContent(props) {
     signalsImport.forEach(signal => {
 
         // check if a signals has at least 1 value that is continuous
-        if (!(signal["Data types"].includes("int") || signal["Data types"].includes("float"))) {
+        if (signal["Data types"].includes("int") || signal["Data types"].includes("float")) {
 
             // create arrays for the datatypes and fieldnames contained in the signal
             const dataTypesArr = signal["Data types"].split(',');
@@ -62,7 +63,7 @@ function PlotContent(props) {
                     if (!dataTypesArr[i].includes("int") || !dataTypesArr[i].includes("float")) {
 
                         // We push the signal name together with the fieldname to the searchlist
-                        searchData.push( signal.Name + " - " + fieldNamesArr[i])
+                        searchData.push(signal.Name + " - " + fieldNamesArr[i])
                     }
                 }
             }
@@ -76,14 +77,14 @@ function PlotContent(props) {
     const dataFiltered = filterData(searchQuery, searchData);
 
     const [open, setOpen] = React.useState(false);
-    const [selectedBtn, setSelectedBtn] = React.useState(1);
+    const [selectedCar, setSelectedCar] = React.useState(1);
     const [historic, setHistoric] = React.useState(false);
 
     const [containerRef, { width, height }] = useElementSize();
 
 
     // Add useEffect to check state of updated signals
-    useEffect(() => {props.onChangePlot(plotName, signals)}, [signals]);
+    useEffect(() => { props.onChangePlot(plotName, signals) }, [signals]);
 
 
     const historicButton = <TimelineIcon />
@@ -104,10 +105,24 @@ function PlotContent(props) {
     const handleAddSignal = (e) => {
 
         // Add a signal. default post processing and color are handled by the signal component.
-        const newSignals = signals.concat({signalName: e.target.value});
+        const newSignals = signals.concat({ signalName: e.target.value });
 
         // Set newSignals to be the new signals array
         setSignals(newSignals);
+
+        sio.subscribe(e.target.value.split(" - ")[0], "car" + selectedCar);
+    }
+
+    const clearSignals = () => {
+        signals.forEach((signal) => {
+            sio.unsubscribe(signal.signalName.split(" - ")[0], "car" + selectedCar);
+        })
+        setSignals([]);
+    }
+
+    const handleChangeCar = (car) => {
+        clearSignals();
+        setSelectedCar(car);
     }
 
     const handleRemoveSignal = (signalName) => {
@@ -115,7 +130,12 @@ function PlotContent(props) {
         // Filter the current signals array for the signalName we got, set it to a new array
         const newSignals = signals.filter((obj) => {
             return obj.signalName != signalName;
-        })
+        }) 
+        
+        // If there are no other signals that share the same source, unsubscribe from the source signal
+        if (newSignals.filter(signal => signal.signalName.split(" - ")[0] == signalName.split(" - ")[0]).length == 0) {
+            sio.unsubscribe(signalName.split(" - ")[0], "car" + selectedCar);
+        }
 
         // Set newSignals to be the new signals array
         setSignals(newSignals);
@@ -125,12 +145,12 @@ function PlotContent(props) {
 
         // Find index of object we want to change
         const signalIndex = signals.findIndex((signal => signal.signalName == signalName));
-        
+
         // copy the original array, as to not mutate the original array
         const newSignals = [...signals];
 
         // change the value that we want to change
-        newSignals[signalIndex] = {signalName, pp, color};
+        newSignals[signalIndex] = { signalName, pp, color };
 
         // Send it to console for checking
         console.log('signals changed to: ', newSignals[signalIndex])
@@ -267,12 +287,12 @@ function PlotContent(props) {
 
             />
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
-                <DialogTitle><TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName}/></DialogTitle>
+                <DialogTitle><TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName} /></DialogTitle>
                 <DialogContent>
                     <ButtonGroup disableElevation variant="contained" color="primary">
-                        <Button color={selectedBtn === 1 ? "secondary" : "primary"} onClick={() => setSelectedBtn(1)}>Lux</Button>
-                        <Button color={selectedBtn === 2 ? "secondary" : "primary"} onClick={() => setSelectedBtn(2)}>Stella</Button>
-                        <Button color={selectedBtn === 3 ? "secondary" : "primary"} onClick={() => setSelectedBtn(3)}>Vie</Button>
+                        <Button color={selectedCar === 1 ? "secondary" : "primary"} onClick={() => handleChangeCar(1)}>Lux</Button>
+                        <Button color={selectedCar === 2 ? "secondary" : "primary"} onClick={() => handleChangeCar(2)}>Stella</Button>
+                        <Button color={selectedCar === 3 ? "secondary" : "primary"} onClick={() => handleChangeCar(3)}>Vie</Button>
                     </ButtonGroup>
 
                     <div className="signalContainer">
@@ -285,17 +305,20 @@ function PlotContent(props) {
 
                         {/* render list of added signals */}
                         {signals.map(signal => {
-                            return(<Signal signalName={signal.signalName} pp={signal.pp} color={signal.color} onRemoveSignal={handleRemoveSignal} onChangeSignal={handleChangeSignal}/>)
+                            return (<Signal signalName={signal.signalName} pp={signal.pp} color={signal.color} onRemoveSignal={handleRemoveSignal} onChangeSignal={handleChangeSignal} />)
                         })}
-                        
 
-                        
+
+
                         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                         <div style={{ padding: 3 }} className="searchResults">
                             {dataFiltered.map((d) => (
-                                <Button variant="contained" key={d.id} value={d} className="searchResult" onClick={handleAddSignal}>
+
+                                <button key={d.id} className="searchResult" value={d} onClick={handleAddSignal}>
                                     {d}
-                                </Button>
+                                </button>
+
+
                             ))}
                         </div>
                     </div>

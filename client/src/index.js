@@ -3,20 +3,26 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import io from "socket.io-client"
 
-//let data;
+let data;
 //export {data};
 
-// const { io, connect } = require('socket.io-client');
-// const socket = io('http://localhost:3001');
+const socket = io('http://localhost:4000');
 
-// socket.on("connect", () => {
-//   console.log("Connected");
-// })
+socket.on("dataevent", (data) => {
+  // data = { topic: topic, key: car, data: {data object}}
+})
 
-// socket.on("connect_error", (error) => {
-//   console.log(`Error: ${error.message}`);
-// })
+export function subscribe(topic, key) {
+  socket.emit("client-subscribe", { topic, key });
+  console.log("subscribed to: " + topic + ", car: " + key)
+}
+
+export function unsubscribe(topic, key) {
+  socket.emit("client-unsubscribe", { topic, key });
+  console.log("unsubscribed from: " + topic)
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
