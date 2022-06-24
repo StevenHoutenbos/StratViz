@@ -5,7 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import io from 'socket.io-client';
 
-// Create the socket instance as part of our sever
+let dataArray = require('./data');
+
 const socket = io('http://localhost:4000');
 
 socket.on("dataevent", (data) => {
@@ -14,7 +15,9 @@ socket.on("dataevent", (data) => {
 
   // Now we need to send this data to some managing object/system that can forward the data to the right tab
   // And then forwards the data to the right plot
-});
+  console.log(data);
+  dataArray.unshift(data);
+})
 
 function subscribe(topic, key) {
   socket.emit("client-subscribe", { topic, key });
@@ -37,10 +40,6 @@ module.exports = {
   subscribe,
   unsubscribe
 };
-
-// socket.on("dataevent", (arg) => {
-//   //data = arg;
-// });
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

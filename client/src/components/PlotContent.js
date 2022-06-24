@@ -10,9 +10,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import EditIcon from '@mui/icons-material/Edit';
-import * as socketData from '../index.js';
+
+let dataArray = require('../data');
 
 const primary = teal[500];
+
+function timeConverter(UNIX_timestamp) {
+    let a = new Date(UNIX_timestamp * 1000);
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    let year = a.getFullYear();
+    let month = months[a.getMonth()];
+    let date = a.getDate();
+    let hour = a.getHours();
+    let min = a.getMinutes();
+    let sec = a.getSeconds();
+    let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return time;
+}
 
 function PlotContent(props) {
 
@@ -29,23 +43,24 @@ function PlotContent(props) {
         setOpen(false);
     };
 
+    // Static randomized JSON objects for testing purposes
     let data = [JSON.parse('{"timestamp":"' + new Date(2019, 1, 2).toDateString() + '", "value":' + 40 + '}')];
     for (let i = 1; i < 200; i++) {
         let date = new Date(2019, 1, 2+i);
         let string = "" + date.getMonth() + "/" + date.getDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + ":" + date.getUTCSeconds();
         data.unshift(JSON.parse('{"timestamp":"' + date + '", "value":' + String(data[0].value+((Math.random()-0.5)*10)) + '}'));
     }
-    console.log(data);
-    // If the connection to the database works, all we should need to do is switch from the line above to
-    // const data = plotData
 
     let x = [];
     let y = [];
 
-    for (let i = 0; i < data.length; i++) {
-        x.push(data[i].timestamp);
-        // TODO: Switch to actual signal name when connection is up
-        y.push(data[i].value);
+    // Actual dynamic data input
+    // TODO: Use actual names as used in development
+    for (let j=0; j < dataArray.length; j++) {
+        if (dataArray[j].topic == subscribed_topic && dataArray[j].key == subscribed_key) {
+            x.push(timeConverter(dataArray[j].timestamp));
+            y.push(dataArray[j].signalValue)
+        }
     }
 
     let trace = {
@@ -61,7 +76,7 @@ function PlotContent(props) {
     let styling = {
         title: props.plotName,
         xaxis: {
-            autorange: false,
+            autorange: true,
             range: [new Date(2019, 1, 100).toDateString(), new Date(2019, 1, 105).toDateString()],
             rangeslider: { range: [new Date(2019, 1, 100).toDateString(), new Date(2019, 1, 105).toDateString()] },
             type: 'datetime',
@@ -76,9 +91,6 @@ function PlotContent(props) {
         useResizeHandler: true,
         className: "plotGraph"
     };
-
-    // console.log(trace.x);
-
 
     return (
         <div class="plotContainer">
