@@ -7,16 +7,16 @@ import reportWebVitals from './reportWebVitals';
 //let data;
 //export {data};
 
-const { io, connect } = require('socket.io-client');
-const socket = io('http://localhost:3001');
+// const { io, connect } = require('socket.io-client');
+// const socket = io('http://localhost:3001');
 
-socket.on("connect", () => {
-  console.log("Connected");
-})
+// socket.on("connect", () => {
+//   console.log("Connected");
+// })
 
-socket.on("connect_error", (error) => {
-  console.log(`Error: ${error.message}`);
-})
+// socket.on("connect_error", (error) => {
+//   console.log(`Error: ${error.message}`);
+// })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
