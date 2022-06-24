@@ -3,20 +3,29 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import io from 'socket.io-client';
 
-//let data;
-//export {data};
+let dataArray = require('./data');
 
-// const { io, connect } = require('socket.io-client');
-// const socket = io('http://localhost:3001');
+const socket = io('http://localhost:4000');
 
-// socket.on("connect", () => {
-//   console.log("Connected");
-// })
+socket.on("dataevent", (data) => {
+  // We receive the following data:
+  // data = {topic: "topic", key: "key", data: {data object}}
 
-// socket.on("connect_error", (error) => {
-//   console.log(`Error: ${error.message}`);
-// })
+  // Now we need to send this data to some managing object/system that can forward the data to the right tab
+  // And then forwards the data to the right plot
+  console.log(data);
+  dataArray.unshift(data);
+})
+
+function subscribe(topic, key) {
+  socket.emit("client-subscribe", { topic, key });
+}
+
+function unsubscribe(topic, key) {
+  socket.emit("client-unsubscribe", { topic, key });
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -25,9 +34,12 @@ root.render(
   </React.StrictMode>
 );
 
-// socket.on("dataevent", (arg) => {
-//   //data = arg;
-// });
+// Export the functions that allow components to subscribe/unsubscribe from topics
+// To import: import {subscribe, unsubscribe} from 'path/to/index.js'
+module.exports = {
+  subscribe,
+  unsubscribe
+};
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
