@@ -71,7 +71,7 @@ function PlotContent(props) {
     });
 
     const [plotName, setPlotName] = useState(props.plotName)
-    const [signals, setSignals] = useState([]);
+    const [signals, setSignals] = useState(props.signals);
 
     const [searchQuery, setSearchQuery] = useState("");
     const dataFiltered = filterData(searchQuery, searchData);
@@ -84,8 +84,8 @@ function PlotContent(props) {
 
 
     // Add useEffect to check state of updated signals
-    useEffect(() => { props.onChangePlot(plotName, signals) }, [signals]);
-
+    useEffect(() => { props.onChangePlot(props.plotId, plotName, signals) }, [signals]);
+    useEffect(() => { props.onChangePlot(props.plotId, plotName, signals) }, [plotName]);
 
     const historicButton = <TimelineIcon />
     const realtimeButton = <HistoryIcon />
@@ -152,12 +152,10 @@ function PlotContent(props) {
         // change the value that we want to change
         newSignals[signalIndex] = { signalName, pp, color };
 
-        // Send it to console for checking
-        console.log('signals changed to: ', newSignals[signalIndex])
-
         // Set the newSignals array as the new array
         setSignals(newSignals);
 
+        console.log("PlotContent:", signals)
     }
 
     const handleChangePlotName = (e) => {

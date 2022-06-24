@@ -12,19 +12,23 @@ function TabContent(props){
 
     // TODO: update comments
     // handle change of plot
-    const handleChangePlot = (plotName, signals) => {
+    const handleChangePlot = (plotId, plotName, signals) => {
         
+        console.log(plotName, signals)
+
         // Find index of object we want to change
-        const plotIndex = plots.findIndex((plot => plot.plotName == plotName));
+        const plotIndex = plots.findIndex((plot => plot.plotId == plotId));
         
         // copy the original array, as to not mutate the original array
         const newPlots = [...plots];
 
         // change the value that we want to change
-        newPlots[plotIndex] = {plotName, signals};
+        newPlots[plotIndex] = {plotName, plotId, signals};
 
         // Set the newSignals array as the new array
         setPlots(newPlots);
+
+        console.log("TabContent:", plots)
     }
 
     return(
@@ -32,6 +36,7 @@ function TabContent(props){
             <div className='gridContainer'>
                 {plots.map(plot => <PlotContent 
                     plotName={plot.plotName} 
+                    plotId={plot.plotId}
                     signals={plot.signals} 
                     onChangePlot={handleChangePlot}
                 />)}

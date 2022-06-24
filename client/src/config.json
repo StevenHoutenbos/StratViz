@@ -1,18 +1,22 @@
 {
     "tabs": [{
       "tabName": "New tab",
-      "tabId": "BUY6Drn9e1",
+      "tabId": "0",
       "plots": [{
-        "plotName": "new Plot",
+        "plotName": "new Plot 1",
+        "plotId": 1,
         "signals": []
       }, {
-        "plotName": "new Plot",
+        "plotName": "new Plot 2",
+        "plotId": 2,
         "signals": []
       }, {
-        "plotName": "new Plot",
+        "plotName": "new Plot 3",
+        "plotId": 3,
         "signals": []
       }, {
-        "plotName": "new Plot",
+        "plotName": "new Plot 4",
+        "plotId": 4,
         "signals": []
       }
       ]
