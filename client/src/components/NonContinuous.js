@@ -1,5 +1,6 @@
 import React from "react";
 import nonContinuousValues from '../messages.json'
+import * as sio from "../index"
 
 function NonContinuous(props) {
     return (
@@ -19,6 +20,7 @@ function NonContinuous(props) {
                         } else {
                             for (let i = 0; i < dataTypesArr.length; i++) {
                                 if (!dataTypesArr[i].includes("int") || !dataTypesArr[i].includes("float")) {
+                                    sio.subscribe(signal.Name.split(" - ")[0], "car0");
                                     jsxArr.push(
                                         <>
                                             <div><p className="signalName">{(i == 0) ? signal.Name : ""}</p></div>
