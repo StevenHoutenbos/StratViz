@@ -17,14 +17,16 @@ socket.on("dataevent", (data) => {
   // And then forwards the data to the right plot
   console.log(data);
   dataArray.unshift(data);
-})
+});
 
-function subscribe(topic, key) {
+export function subscribe(topic, key) {
   socket.emit("client-subscribe", { topic, key });
+  console.log("subscribed to: " + topic + ", car: " + key)
 }
 
-function unsubscribe(topic, key) {
+export function unsubscribe(topic, key) {
   socket.emit("client-unsubscribe", { topic, key });
+  console.log("unsubscribed from: " + topic)
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
