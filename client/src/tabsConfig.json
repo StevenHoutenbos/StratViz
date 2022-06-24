@@ -1,19 +1,19 @@
 {
 	"tabs": [{
 			"_uid": "BUY6Drn9e1",
-			"tabName": "Dit is een test",
+			"tabName": "Main tab",
 			"graphs": [
         {
-					"graphName": "graph one"
+					"graphName": "Left Motor Power"
 				},
 				{
-					"graphName": "graph two"
+					"graphName": "Right Motor Power"
 				},
 				{
-					"graphName": "some other graph"
+					"graphName": "Solar Energy"
 				},
 				{
-					"graphName": "a fourth graph"
+					"graphName": "Velocity"
 				}
 			]
 		},

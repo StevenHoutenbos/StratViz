@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ButtonGroup } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+let dataArray = require('../data');
 import TimelineIcon from '@mui/icons-material/Timeline';
 import HistoryIcon from '@mui/icons-material/History';
 import { useElementSize } from 'usehooks-ts';
@@ -35,6 +36,19 @@ const filterData = (query, data) => {
         return data.filter((d) => d.toLowerCase().startsWith(query.toLowerCase())).splice(0, 20);
     }
 };
+
+function timeConverter(UNIX_timestamp) {
+    let a = new Date(UNIX_timestamp * 1000);
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    let year = a.getFullYear();
+    let month = months[a.getMonth()];
+    let date = a.getDate();
+    let hour = a.getHours();
+    let min = a.getMinutes();
+    let sec = a.getSeconds();
+    let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return time;
+}
 
 function PlotContent(props) {
 
@@ -97,6 +111,14 @@ function PlotContent(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    // Static randomized JSON objects for testing purposes
+    let data = [JSON.parse('{"timestamp":"' + new Date(2019, 1, 2).toDateString() + '", "value":' + 40 + '}')];
+    for (let i = 1; i < 200; i++) {
+        let date = new Date(2019, 1, 2+i);
+        let string = "" + date.getMonth() + "/" + date.getDate() + " " + date.getUTCHours() + ":" + date.getUTCMinutes() + ":" + date.getUTCSeconds();
+        data.unshift(JSON.parse('{"timestamp":"' + date + '", "value":' + String(data[0].value+((Math.random()-0.5)*10)) + '}'));
+    }
 
     const handleTimeMode = () => {
         setHistoric(historic => !historic);
@@ -191,58 +213,35 @@ function PlotContent(props) {
     let x = [];
     let y = [];
 
-    for (let i = 0; i < data.length; i++) {
-        x.push(data[i].timestamp);
-        // TODO: Switch to actual signal name when connection is up
-        y.push(data[i].value);
+    // Actual dynamic data input
+    // TODO: Use actual names as used in development
+    for (let j=0; j < dataArray.length; j++) {
+        if (dataArray[j].topic == subscribed_topic && dataArray[j].key == subscribed_key) {
+            x.push(timeConverter(dataArray[j].timestamp));
+            y.push(dataArray[j].signalValue)
+        }
+
     }
 
     let trace = {
         type: "scatter",
         fill: "tozeroy",
         mode: "lines",
-        name: "Motor Power",
+        name: props.plotName,
         x: x,
         y: y,
-        line: { color: '#17BECF' }
+        line: { color: props.graphColor }
     }
 
     let styling = {
+        title: props.plotName,
         xaxis: {
             autorange: true,
-            range: ["15/06/2022 20:33:20", "15/06/2022 20:41:20"],
-            rangeselector: {
-                buttons: [
-                    {
-                        count: 1,
-                        label: '1h',
-                        step: 'hour',
-                        stepmode: 'backward'
-                    },
-                    {
-                        count: 6,
-                        label: '6h',
-                        step: 'hour',
-                        stepmode: 'backward'
-                    },
-                    {
-                        count: 12,
-                        label: '12h',
-                        step: 'hours',
-                        stepmode: 'backward'
-                    },
-                    {
-                        count: 24,
-                        label: '24h',
-                        step: 'hour',
-                        stepmode: 'backward'
-                    },
-                    { step: 'all' }
-                ]
-            },
-            rangeslider: { range: ["14/06/2022 20:33:20", "15/06/2022 20:41:20"] },
+            range: [new Date(2019, 1, 100).toDateString(), new Date(2019, 1, 105).toDateString()],
+            rangeslider: { range: [new Date(2019, 1, 100).toDateString(), new Date(2019, 1, 105).toDateString()] },
             type: 'datetime',
-            ticks: ''
+            tickformat: '%d %B (%a)\n %Y'
+
         },
         yaxis: {
             autorange: true,
@@ -262,9 +261,6 @@ function PlotContent(props) {
             pad: 5
         },
     };
-
-    // console.log(trace.x);
-
 
     return (
         <div class="plotContainer" ref={containerRef}>
