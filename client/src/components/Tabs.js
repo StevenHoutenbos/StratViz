@@ -17,21 +17,25 @@ function Tabs(props) {
 
   let tabCounter = 0;
 
-  const newTab = (tabId) => {
+  const newTab = () => {
     return {
       tabName: "new tab",
-      tabId: tabId,
+      tabId: uuid(),
       plots: [{
         plotName: "new Plot",
+        plotId: uuid(),
         signals: []
       }, {
         plotName: "new Plot",
+        plotId: uuid(),
         signals: []
       }, {
         plotName: "new Plot",
+        plotId: uuid(),
         signals: []
       }, {
         plotName: "new Plot",
+        plotId: uuid(), 
         signals: []
       },
       ]
@@ -76,7 +80,7 @@ function Tabs(props) {
     const newTabs = [...tabs];
 
     // change the value that we want to change
-    newTabs.push(newTab(uuid()));
+    newTabs.push(newTab());
 
     // Set the newSignals array as the new array
     setTabs(newTabs);
@@ -97,6 +101,8 @@ function Tabs(props) {
 
     // Set the newSignals array as the new array
     setTabs(newTabs);
+
+    console.log('tabs:', tabs)
   }
 
   const downloadConfig = () => {
