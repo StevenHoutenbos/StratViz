@@ -204,7 +204,7 @@ function PlotContent(props) {
         name: "Motor Power",
         x: x,
         y: y,
-        line: { color: '#17BECF' }
+        line: { color: (signals.length == 0) ? "#000" : signals[0].color }
     }
 
     let styling = {
@@ -277,6 +277,7 @@ function PlotContent(props) {
                     {historic ? historicButton : realtimeButton}
                 </Button>
             </div>
+            {signals.length == 0 ? undefined : 
             <Plot
                 data={[trace]}
                 layout={styling}
@@ -286,6 +287,7 @@ function PlotContent(props) {
                 }}
 
             />
+            }
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
                 <DialogTitle><TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName} /></DialogTitle>
                 <DialogContent>
