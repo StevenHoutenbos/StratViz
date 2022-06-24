@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 
 class Tab extends Component {
@@ -22,13 +22,21 @@ class Tab extends Component {
     onClick(tabId);
   }
 
-  onDoubleClick = () => {
-    this.setState({ editing: true });
-  }
+    deleteTab = () => {
+      const {tabId, onDelete} = this.props;
+      onDelete(tabId);
+    }
+  
+    handleFocus(e) {
+      e.currentTarget.select();
+    }
 
-  deleteTab = () => {
-    console.log("Deleted tab");
-  }
+    handleBlur = (e) => {
+      const {tabId, onChangeTabName} = this.props;
+      const newTitle = e.target.value;
+      onChangeTabName(tabId, newTitle);
+      this.setState({editing: false})
+    }
 
   handleFocus(e) {
     e.currentTarget.select();
@@ -63,8 +71,8 @@ class Tab extends Component {
 
     const labelEditHTML =
       <>
-        <input autoFocus type="text" id='edit' defaultValue={label} onFocus={this.handleFocus} onBlur={this.handleBlur} />
-        <svg style={{ width: "14px", height: "14px", padding: "0px", paddingLeft: "10px" }} viewBox="0 0 22 22" onmousedown={this.deleteTab}>
+          <input autoFocus type="text" id='edit' defaultValue={label} onFocus={this.handleFocus} onBlur={this.handleBlur}/>
+          <svg style={{width:"14px",height:"14px",padding:"0px", paddingLeft: "10px"}} viewBox="0 0 22 22" onMouseDown={this.deleteTab}>
           <path fill="currentColor" d="M19,13H5V11H19V13Z" />
         </svg>
       </>
