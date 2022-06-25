@@ -20,6 +20,8 @@ body{
 }
   
 .tab-list {
+  display: flex;
+  align-items: center;
   padding-left: 0;
   margin: 0px;
   background: #ccc;
@@ -133,7 +135,7 @@ body{
   background-color: #ccc;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between ;
 }
 
 .plotTitleContainer > p {
@@ -206,4 +208,14 @@ body{
   background: white;
   box-shadow: 0px 0px 10px #ddd;
   padding: 20px;
+}
+
+.tabButton{
+  color: #777;
+  padding-right: 14px;
+  cursor: pointer;
+}
+
+.ncTab{
+  margin-left: auto;
 }

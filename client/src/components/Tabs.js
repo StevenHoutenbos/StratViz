@@ -5,6 +5,7 @@ import NonContinous from './NonContinuous'
 import TabContent from './TabContent';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuid } from 'uuid';
 
 function Tabs(props) {
@@ -171,26 +172,22 @@ function Tabs(props) {
             />
           );
         })}
-        <button id="addTab" onMouseDown={addTab}>
-          <svg style={{ width: "14px", height: "14px", padding: "0px" }} viewBox="0 0 22 22">
-            <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-          </svg>
-        </button>
-        <button id="downloadConfig" className='tabButton' onMouseDown={downloadConfig}>
-          <CloudDownloadIcon className='tabButton' />
-        </button>
+        <AddIcon id="addTab" onMouseDown={addTab} sx={{  height: '16px'}} style={{cursor: 'pointer', paddingLeft: 4 }}/>
+
+        <div style={{flexGrow: 1}}></div>
+          
+        <CloudDownloadIcon className='tabButton' id="downloadConfig" onMouseDown={downloadConfig} sx={{  height: '20px'}}/>
 
         <input type="file" style={{display: 'none'}} id="upload" ref={uploadRef} onChange={handleUploadFile} />
-        <button id="uploadConfig" onClick={handleUploadClick}>
-          <CloudUploadIcon className='tabButton' />
-        </button>
+        <CloudUploadIcon className='tabButton' id="uploadConfig" onClick={handleUploadClick} sx={{  height: '20px'}}/>
+        
         <Tab
+          styleName="ncTab"
           activeTab={activeTab}
           key="nc"
           tabId="nc"
           label="Non-Continuous"
           onClick={onClickTabItem}
-          float="right"
           editable="false"
         />
       </ol>

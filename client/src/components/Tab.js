@@ -51,12 +51,12 @@ class Tab extends Component {
           activeTab,
           label,
           tabId,
-          float,
-          editable
+          editable,
+          styleName
         },
       } = this;
   
-      let className = 'tab-list-item';
+      let className = 'tab-list-item ' + styleName;
   
       if (activeTab === tabId) {
         className += ' tab-list-active';
@@ -75,7 +75,6 @@ class Tab extends Component {
           className = {className}
           onClick = {onClick}
           onDoubleClick = {editable ? onDoubleClick : ""}
-          style={{float: float}}
         >
           {(this.state.editing ? labelEditHTML : label)}
         </li>
