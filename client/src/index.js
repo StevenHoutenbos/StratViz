@@ -3,21 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import io from 'socket.io-client';
+import io from "socket.io-client"
 
-let dataArray = require('./data');
+let data;
+//export {data};
 
 const socket = io('http://localhost:4000');
 
 socket.on("dataevent", (data) => {
-  // We receive the following data:
-  // data = {topic: "topic", key: "key", data: {data object}}
-
-  // Now we need to send this data to some managing object/system that can forward the data to the right tab
-  // And then forwards the data to the right plot
-  console.log(data);
-  dataArray.unshift(data);
-});
+  // data = { topic: topic, key: car, data: {data object}}
+})
 
 export function subscribe(topic, key) {
   socket.emit("client-subscribe", { topic, key });
@@ -36,12 +31,9 @@ root.render(
   </React.StrictMode>
 );
 
-// Export the functions that allow components to subscribe/unsubscribe from topics
-// To import: import {subscribe, unsubscribe} from 'path/to/index.js'
-module.exports = {
-  subscribe,
-  unsubscribe
-};
+// socket.on("dataevent", (arg) => {
+//   //data = arg;
+// });
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

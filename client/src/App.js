@@ -47,14 +47,9 @@ function App() {
   }
 
   const addTab = (tabId) => {
-    var tabsState = { ...config.tabs };
+    var tabsState = {...config.tabs};
     tabsState.push(newTab(tabId));
-    setConfig({ tabsState });
-  }
-
-  function random_rgba() {
-    let o = Math.round, r = Math.random, s = 255;
-    return 'rgb(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ')';
+    setConfig({tabsState});
   }
 
   return (
