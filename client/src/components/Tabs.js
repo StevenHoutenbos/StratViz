@@ -3,19 +3,27 @@ import PropTypes from 'prop-types';
 import Tab from './Tab';
 import NonContinous from './NonContinuous'
 import TabContent from './TabContent';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { v4 as uuid } from 'uuid';
 
 function Tabs(props) {
 
-  const [tabs, setTabs] = useState(props.config.tabs);
+  const importConfig = (tabs) => {
+    tabs.forEach(tab => {
+      tab.tabId = uuid()
+      tab.plots.forEach(plot => {
+        plot.plotId = uuid()
+      });
+    });
+    console.log(tabs)
+    return tabs
+  }
+
+  const [tabs, setTabs] = useState(importConfig(props.config.tabs));
   const [activeTab, setActiveTab] = useState(props.config.tabs[0].tabId);
 
   const uploadRef = React.useRef(null);
-
-  let tabCounter = 0;
 
   const newTab = () => {
     return {
@@ -137,7 +145,7 @@ function Tabs(props) {
       const text = (e.target.result)
       console.log(tabs)
       console.log(JSON.parse(text))
-      setTabs(JSON.parse(text))
+      setTabs(importConfig(JSON.parse(text)))
     };
     reader.readAsText(e.target.files[0])
   }
