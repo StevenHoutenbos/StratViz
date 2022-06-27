@@ -172,7 +172,7 @@ function Tabs(props) {
             />
           );
         })}
-        <AddIcon id="addTab" onMouseDown={addTab} sx={{  height: '16px'}} style={{cursor: 'pointer', paddingLeft: 4 }}/>
+        <AddIcon id="addTab" onMouseDown={addTab} sx={{  height: '16px'}} style={{cursor: 'pointer', paddingLeft: 4, color: "#777" }}/>
 
         <div style={{flexGrow: 1}}></div>
           
