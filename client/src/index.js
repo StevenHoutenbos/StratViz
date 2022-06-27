@@ -8,7 +8,7 @@ import io from "socket.io-client"
 let data;
 //export {data};
 
-const socket = io('http://localhost:4000');
+export const socket = io('http://localhost:4000');
 
 socket.on("dataevent", (data) => {
   // data = { topic: topic, key: car, data: {data object}}
@@ -26,9 +26,7 @@ export function unsubscribe(topic, key) {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
 );
 
 // socket.on("dataevent", (arg) => {
