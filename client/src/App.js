@@ -2,7 +2,25 @@ import React, { useState } from 'react';
 import "./css/tabs.css";
 import configJSON from "./config.json"
 import Tabs from "./components/Tabs";
-import TabContent from "./components/TabContent"
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import './css/tabs.css';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: '#DDD',
+      main: '#DDD',
+      dark: '#DDD',
+      contrastText: '#000',
+    },
+    secondary: {
+      light: '#CCC',
+      main: '#CCC',
+      dark: '#CCC',
+      contrastText: '#000',
+    },
+  },
+});
 
 function App() {
 
@@ -49,11 +67,13 @@ function App() {
   const addTab = (tabId) => {
     var tabsState = {...config.tabs};
     tabsState.push(newTab(tabId));
-    setConfig({tabsState});
+    setConfig({tabsState}); 
   }
 
   return (
-    <Tabs config={config} setTabName={setTabName} addTab={addTab}/>
+    <ThemeProvider theme={theme}>
+      <Tabs config={config} setTabName={setTabName} addTab={addTab}/>
+    </ThemeProvider>
   );
 }
 

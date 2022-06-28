@@ -260,14 +260,15 @@ function PlotContent(props) {
                 />
             }
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
-                <DialogTitle><TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName} /></DialogTitle>
-                <DialogContent>
-                    <ButtonGroup disableElevation variant="contained" color="primary">
+                <DialogTitle>
+                    <TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName} />
+                    <ButtonGroup disableElevation variant="contained" color="primary" sx={{float: 'right'}}>
                         <Button color={selectedCar === 1 ? "secondary" : "primary"} onClick={() => handleChangeCar(1)}>Lux</Button>
                         <Button color={selectedCar === 2 ? "secondary" : "primary"} onClick={() => handleChangeCar(2)}>Stella</Button>
                         <Button color={selectedCar === 3 ? "secondary" : "primary"} onClick={() => handleChangeCar(3)}>Vie</Button>
                     </ButtonGroup>
-
+                </DialogTitle>
+                <DialogContent>
                     <div className="signalContainer">
                         <div className="plotMenuItem bold">
                             <div>Sensor</div>
@@ -288,7 +289,7 @@ function PlotContent(props) {
                             {dataFiltered.map((d) => (
 
                                 <button key={d.id} className="searchResult" value={d} onClick={handleAddSignal}>
-                                    {d}
+                                    <p>{d}</p>
                                 </button>
 
 
