@@ -13,7 +13,12 @@ import HistoryIcon from '@mui/icons-material/History';
 import { useElementSize } from 'usehooks-ts';
 import signalsImport from '../messages.json';
 import Signal from "./Signal.js";
-import * as sio from "../index"
+import * as sio from "../index";
+import Slider from "@mui/material/Slider";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import Remove from "@mui/icons-material/Remove";
+
 
 var hash = require("object-hash");
 
@@ -42,6 +47,10 @@ function PlotContent(props) {
 
     // Initialize list of signals to be searched
     const searchData = [];
+
+    const minDistance = 10;
+    const rangeMax = 100;
+    const zoomDist = 3;
 
     // import all continuous signals so we can search trough them
     signalsImport.forEach(signal => {
@@ -75,6 +84,7 @@ function PlotContent(props) {
     const [plotName, setPlotName] = useState(props.plotName)
     const [signals, setSignals] = useState(props.signals);
     const [data, setData] = useState([]);
+    const [range, setRange] = useState([10, 20])
 
     const [searchQuery, setSearchQuery] = useState("");
     const dataFiltered = filterData(searchQuery, searchData);
@@ -136,8 +146,48 @@ function PlotContent(props) {
     };
 
     const handleTimeMode = () => {
+        var newRange = [range[0], rangeMax]
+        setRange(newRange)
         setHistoric(historic => !historic);
     }
+
+    const handleSliderChange = (event, newValue, activeThumb) => {
+        if (!Array.isArray(newValue)) {
+          return;
+        }
+    
+        if (newValue[1] - newValue[0] < minDistance) {
+          if (activeThumb === 0) {
+            const clamped = Math.min(newValue[0], rangeMax - minDistance);
+            setRange([clamped, clamped + minDistance]);
+          } else if (historic){
+            const clamped = Math.max(newValue[1], minDistance);
+            setRange([clamped - minDistance, clamped]);
+          }
+        } else {
+          if (historic){  
+          setRange(newValue);
+          } else {
+            setRange([newValue[0], rangeMax])
+          }
+        }
+      };
+
+      const handleZoomIn = () => {
+        if(historic){
+            setRange([range[0] + zoomDist, range[1] - zoomDist])
+        } else {
+            setRange([range[0] + zoomDist, rangeMax])
+        }
+      }
+
+      const handleZoomOut = () => {
+        if(historic){
+            setRange([range[0] - zoomDist , range[1] + zoomDist])
+        } else {
+            setRange([range[0] - zoomDist, rangeMax])
+        }
+      }
 
     const handleAddSignal = (e) => {
 
@@ -215,25 +265,23 @@ function PlotContent(props) {
 
     var layout = {
         xaxis: {
-            autorange: true,
-            rangeslider: {},
-            type: 'float',
-            ticks: ''
+            range: range,
+            type: 'int',
         },
         yaxis: {
             autorange: true,
             type: "linear"
         },
         width: width,
-        height: height + 10 - 36,
+        height: height -80,
         autosize: true,
         useResizeHandler: true,
         className: "plotGraph",
         margin: {
             l: 30,
             r: 10,
-            b: 10,
-            t: 10,
+            b: 1,
+            t: 15,
             pad: 5
         },
         datarevision: i,
@@ -241,16 +289,25 @@ function PlotContent(props) {
     };
 
     return (
-        <div class="plotContainer" ref={containerRef}>
+        <div class="plotComponentContainer" ref={containerRef}>
             <div className="plotTitleContainer">
                 <Button variant="text" onClick={handleClickOpen} className="plotTitleButton">
                     <EditIcon />
                 </Button>
                 <p>{plotName}</p>
+                <div>
+                <Button variant="text" onClick={handleZoomIn} className="plotTitleButton">
+                    <AddIcon/>
+                </Button>
+                <Button variant="text" onClick={handleZoomOut} className="plotTitleButton">
+                    <RemoveIcon/>
+                </Button>
                 <Button variant="text" onClick={handleTimeMode} className="plotTitleButton">
                     {historic ? historicButton : realtimeButton}
                 </Button>
+                </div>
             </div>
+            <div className="plotContainer">
             {signals.length == 0 ? undefined :
                 <Plot
                     data={signals.map(({ trace }) => (trace))}
@@ -262,6 +319,17 @@ function PlotContent(props) {
                     divId={props.plotId}
                 />
             }
+            </div>
+            <div className="timeSliderContainer">
+                <Slider
+                    getAriaLabel={() => 'Minimum distance shift'}
+                    value={range}
+                    onChange={handleSliderChange}
+                    valueLabelDisplay="auto"
+                    disableSwap
+                    sx={{width: "100%"}}
+                />
+            </div>
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
                 <DialogTitle>
                     <TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName} />
