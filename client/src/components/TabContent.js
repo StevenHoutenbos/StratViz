@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { PropTypes } from "prop-types";
-import PlotContent from "./PlotContent";
+import PlotContent from "./PlotContent.js";
 
 function TabContent(props){
 

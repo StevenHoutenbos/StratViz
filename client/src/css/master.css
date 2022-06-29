@@ -1,61 +1,211 @@
-/* Style the tab */
-body{
+html,
+body,
+#app,
+#app>div {
   margin: 0px;
   background: #f1f1f1;
+  height: 100%;
 }
 
-.tab {
-  overflow: hidden;
-  background-color: #ccc;
+body {
+  overflow-y: scroll;
 }
 
-/* Style the buttons that are used to open the tab content */
-.tab button {
+#root {
+  height: 100vh;
+}
+
+.tabs {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.tab-list {
+  padding-left: 0;
+  margin: 0px;
+  background: #ccc;
+  flex: 40px 0 auto;
+}
+
+.tab-list-item {
+  display: inline-block;
+  list-style: none;
+  transition: 0.3s;
+  border-radius: 10px 10px 0px 0px;
+  cursor: pointer;
+  padding: 10px 16px 10px 16px;
+  font-size: 14px;
+}
+
+.tab-list>button {
   background-color: inherit;
   float: left;
   border: none;
   outline: none;
   cursor: pointer;
-  height: 40px;
-  padding-left: 16px;
-  padding-right: 16px;
+  height: auto;
+  padding: 11px 16px 0px 16px;
   transition: 0.3s;
 }
 
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background: #ccc;
+.tab-list-item:hover {
+  background: #ccc;
   -webkit-box-shadow: inset 0 0 20px #ddd;
   -moz-box-shadow: inset 0 0 20px #ddd;
   box-shadow: inset 0 0 20px #ddd;
   border-radius: 10px 10px 0px 0px;
 }
 
-.tab button.active:hover {
+.tab-list-active {
   background: #f1f1f1;
--webkit-box-shadow: inset 0 0 0px #f1f1f1;
--moz-box-shadow: inset 0 0 0px #f1f1f1;
-box-shadow: inset 0 0 0px #f1f1f1;
-border-radius: 10px 10px 0px 0px;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #f1f1f1;
   border-radius: 10px 10px 0px 0px;
 }
 
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  margin: 8px;
+.tab-list-active:hover {
+  background: #fff;
+  -webkit-box-shadow: inset 0 0 20px #ddd;
+  -moz-box-shadow: inset 0 0 20px #ddd;
+  box-shadow: inset 0 0 20px #ddd;
+  border-radius: 10px 10px 0px 0px;
 }
 
-input[type=text]{
-  margin: 0px;
-  padding: 0px;
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 14px;
+  height: 90vh;
+}
+
+.ncGridContainer {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr 1fr;
+}
+
+.ncGridContainer>div {
+  padding-right: 20px;
+}
+
+.tab-content {
+  flex: 1 1 auto;
+  padding: 14px;
+}
+
+.gridContainer>div {
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0px 0px 10px #ddd;
+}
+
+.timeAdjustment {
+  /* background: gray; */
+  margin: 0px 14px 14px 14px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sliderWrapper {
+  background: gray;
+  flex-grow: 1;
+  margin-left: 14px;
+  border-radius: 4px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-shadow: 0px 0px 10px #ccc;
+}
+
+.buttonGroup {
+  box-shadow: 0px 0px 10px #000;
+}
+
+.gridContainer>div>p {
+  font-size: 14px;
+}
+
+.plotTitleContainer {
+  width: 100%;
+  height: 36px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plotTitleContainer>p {
+  margin: 20px;
+}
+
+.plotTitleButton {
+  color: #777 !important;
 }
 
 .plotContainer {
-  position:relative;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+
+.plotMenuItem {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr 20px;
+}
+
+.plotMenuItem>div {
+  display: flex;
+  align-items: center;
+}
+
+.plotMenuItem:first-child {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.signalContainer {
+  margin-top: 40px;
+}
+
+.searchbar {
+  width: 100%;
+  margin-top: 40px !important;
+  margin-bottom: 20px !important;
+}
+
+.searchResults {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.searchResult {
+  cursor: pointer;
+  background-color: #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  overflow: hidden;
+  border: 0px;
+}
+
+.dot {
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.plot {
+  height: min-content;
+  width: max-content;
+}
+
+.card {
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0px 0px 10px #ddd;
+  padding: 20px;
 }
