@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import signals from '../messages.json'
-import * as sio from "../index"
+import * as sio from "../index.js"
 
 function NonContinuous(props) {
     const [lastVals, setLastVals] = useState({});

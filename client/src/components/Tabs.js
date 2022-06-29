@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import Tab from './Tab';
-import NonContinous from './NonContinuous'
-import TabContent from './TabContent';
+import Tab from './Tab.js';
+import NonContinous from './NonContinuous.js'
+import TabContent from './TabContent.js';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import AddIcon from '@mui/icons-material/Add';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./css/tabs.css";
+import "./css/master.css";
 import configJSON from "./config.json"
 import Tabs from "./components/Tabs";
 import { createTheme, ThemeProvider } from '@mui/material/styles';

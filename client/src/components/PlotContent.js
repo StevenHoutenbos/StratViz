@@ -12,7 +12,7 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import HistoryIcon from '@mui/icons-material/History';
 import { useElementSize } from 'usehooks-ts';
 import signalsImport from '../messages.json';
-import Signal from "./Signal";
+import Signal from "./Signal.js";
 import * as sio from "../index"
 
 var hash = require("object-hash");
@@ -118,6 +118,8 @@ function PlotContent(props) {
                 setI(i + 1);
             }
         });
+        // TODO: read off range from graph
+        // document.getElementById(props.plotId).layout.xaxis.range
         data.shift();
         setData(data);
     }, [data]);
@@ -257,6 +259,7 @@ function PlotContent(props) {
                         "displaylogo": false,
                         responsive: true
                     }}
+                    divId={props.plotId}
                 />
             }
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
