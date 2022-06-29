@@ -292,7 +292,7 @@ function PlotContent(props) {
                             {dataFiltered.map((d) => (
 
                                 <button key={d.id} className="searchResult" value={d} onClick={handleAddSignal}>
-                                    <p>{d}</p>
+                                    {d}
                                 </button>
 
 
