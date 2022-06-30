@@ -84,7 +84,7 @@ body {
 
 .ncGridContainer {
   display: grid;
-  grid-template-columns: auto 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr 1fr 1fr 1fr;
 }
 
 .ncGridContainer>div {
@@ -151,7 +151,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
 .plotTitleContainer>p {
   margin: 20px;
@@ -230,17 +229,17 @@ body {
   padding: 20px;
 }
 
-.tabButton{
+.tabButton {
   color: #777;
   padding-right: 14px;
   cursor: pointer;
 }
 
-.ncTab{
+.ncTab {
   margin-left: auto;
 }
 
-p{
+p {
   font-family: 'Roboto', sans-serif;
   margin: 0px;
   padding: 0px;
