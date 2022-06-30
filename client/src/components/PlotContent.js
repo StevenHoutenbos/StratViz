@@ -51,6 +51,7 @@ function PlotContent(props) {
     const minDistance = 10;
     const rangeMax = 100;
     const zoomDist = 3;
+    const zoomMultiplier = 0.2;
 
     // import all continuous signals so we can search trough them
     signalsImport.forEach(signal => {
@@ -174,18 +175,20 @@ function PlotContent(props) {
       };
 
       const handleZoomIn = () => {
+        var rangeSize = (range[1] - range[0])*zoomMultiplier;
         if(historic){
-            setRange([range[0] + zoomDist, range[1] - zoomDist])
+            setRange([range[0] + rangeSize, range[1] - rangeSize])
         } else {
-            setRange([range[0] + zoomDist, rangeMax])
+            setRange([range[0] + rangeSize, rangeMax])
         }
       }
 
       const handleZoomOut = () => {
+        var rangeSize = (range[1] - range[0])*zoomMultiplier;
         if(historic){
-            setRange([range[0] - zoomDist , range[1] + zoomDist])
+            setRange([range[0] - rangeSize , range[1] + rangeSize])
         } else {
-            setRange([range[0] - zoomDist, rangeMax])
+            setRange([range[0] - rangeSize, rangeMax])
         }
       }
 
