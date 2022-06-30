@@ -9,10 +9,6 @@ let data;
 
 export const socket = io('http://localhost:4000');
 
-socket.on("dataevent", (data) => {
-  // data = { topic: topic, key: car, data: {data object}}
-})
-
 export function subscribe(topic, key) {
   socket.emit("client-subscribe", { topic, key });
   console.log("subscribed to: " + topic + ", car: " + key)
@@ -20,7 +16,27 @@ export function subscribe(topic, key) {
 
 export function unsubscribe(topic, key) {
   socket.emit("client-unsubscribe", { topic, key });
-  console.log("unsubscribed from: " + topic)
+  console.log("unsubscribed from: " + topic);
+}
+
+// Has input: data: {topic: "", key: "", start: 0, end: 0}
+//            callback => function
+export function getHistoric(data, callback) {
+  socket.emit("historical", data, callback);
+  // wait for server to process
+  // now wait for new event to appear (e.g. historical-result)
+}
+
+function test() {
+  data = {};
+  data.topic = "ACU_KeepAlive";
+  data.key = "car1";
+  data.start = 140203200
+  data.end = 1381838404;
+
+  getHistoric(data, (historic) => {
+    console.log(historic);
+  });
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

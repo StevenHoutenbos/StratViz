@@ -95,8 +95,8 @@ function PlotContent(props) {
     useEffect(() => { props.onChangePlot(props.plotId, plotName, signals) }, [signals]);
     useEffect(() => { props.onChangePlot(props.plotId, plotName, signals) }, [plotName]);
     useEffect(() => {
-        sio.socket.on("dataevent", (data) => { // TODO: change to real-time only
-            setData((curData) => [...curData, data]);
+        sio.socket.on("dataevent", (date) => { // TODO: change to real-time only
+            setData((curData) => [...curData, date]);
         })
         return function cleanup() {
             sio.socket.off("dataevent");
@@ -105,22 +105,24 @@ function PlotContent(props) {
 
     useEffect(() => {
         // data = { topic: topic, key: car, data: {data object}}
-        if (data.length == 0) return;
-        var sdata = data[0];
-        signals.forEach((signal) => {
-            if (signal.signalName.split(" - ")[0] === sdata.topic && ("car" + selectedCar) === sdata.key) {
-                console.log(sdata);
-                signal.trace.x.push(i);
-                signal.trace.y.push(sdata.data[signal.signalName.split(" - ")[1]]);
+        while (data.length != 0) {
+            var sdata = data[0];
+            signals.forEach((signal) => {
+                console.log(signal.signalName.split(" - ")[0] + ":" + sdata.topic);
+                if (signal.signalName.split(" - ")[0] === sdata.topic && ("car" + selectedCar) === sdata.key) {
+                    console.log(sdata);
+                    signal.trace.x.push(sdata.data.timestamp);
+                    signal.trace.y.push(sdata.data[signal.signalName.split(" - ")[1]]);
+                }
+            });
+            // TODO: read off range from graph
+            // document.getElementById(props.plotId).layout.xaxis.range
+            data.shift();
+        }
 
-                // update the signals
-                setSignals(currentSignals => [...currentSignals]);// Update the signals
-                setI(i + 1);
-            }
-        });
-        // TODO: read off range from graph
-        // document.getElementById(props.plotId).layout.xaxis.range
-        data.shift();
+        // update the signals
+        setSignals(currentSignals => [...currentSignals]);// Update the signals
+        setI(i + 1);
         setData(data);
     }, [data]);
 
@@ -156,7 +158,7 @@ function PlotContent(props) {
         // Set newSignals to be the new signals array
         setSignals(newSignals);
 
-        sio.subscribe(e.target.value.split(" - ")[0], "car" + selectedCar);
+        //sio.subscribe(e.target.value.split(" - ")[0], "car" + selectedCar);
     }
 
     const clearSignals = () => {
@@ -265,7 +267,7 @@ function PlotContent(props) {
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
                 <DialogTitle>
                     <TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName} />
-                    <ButtonGroup disableElevation variant="contained" color="primary" sx={{float: 'right'}}>
+                    <ButtonGroup disableElevation variant="contained" color="primary" sx={{ float: 'right' }}>
                         <Button color={selectedCar === 1 ? "secondary" : "primary"} onClick={() => handleChangeCar(1)}>Lux</Button>
                         <Button color={selectedCar === 2 ? "secondary" : "primary"} onClick={() => handleChangeCar(2)}>Stella</Button>
                         <Button color={selectedCar === 3 ? "secondary" : "primary"} onClick={() => handleChangeCar(3)}>Vie</Button>

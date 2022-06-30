@@ -4,10 +4,11 @@ import * as sio from "../index.js"
 
 function NonContinuous(props) {
     const [lastVals, setLastVals] = useState({});
+    const [lastUpdate, setLastUpdate] = useState({});
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        sio.socket.on("dataevent", (data) => { // TODO: change to real-time only
+        sio.socket.on("dataevent", (data) => {
             setData((curData) => [...curData, data]);
         })
         return function cleanup() {
@@ -16,34 +17,39 @@ function NonContinuous(props) {
     }, [])
 
     useEffect(() => {
-        if (data.length == 0) return;
-        // sdata = { topic: topic, key: car, data: {data object}}
-        var sdata = data[0];
+        var newVals = structuredClone(lastVals);
+        var newUpdate = structuredClone(lastUpdate);
 
-        console.log(sdata);
-        var newVal = {};
+        while (data.length != 0) {
+            // sdata = { topic: topic, key: car, data: {data object}}
+            var sdata = data[0];
 
-        // For all the fields in the data object
-        for (const [key, value] of Object.entries(sdata.data)) {
-            // That are not timestamp or name
-            if (key === "timestamp" || key === "name") {
-                continue;
+            var newVal = {};
+
+            // For all the fields in the data object
+            for (const [key, value] of Object.entries(sdata.data)) {
+                // That are not timestamp or name
+                if (key === "timestamp" || key === "name") {
+                    continue;
+                }
+
+                // Add it to the newVal object
+                newVal[key] = sdata.data[key].toString();
             }
 
-            // Add it to the newVal object
-            newVal[key] = sdata.data[key].toString();
-        }
+            console.log(newVal);
+            // Then set the value object of this topic to the new value
+            newVals[sdata.topic] = newVal;
+            // And set the timestamp of the last update
+            newUpdate[sdata.topic] = sdata.data.timestamp;
 
-        console.log(newVal);
-        var newVals = structuredClone(lastVals);
-        // Then set the value object of this topic to the new value
-        newVals[sdata.topic] = newVal;
+            // Remove sdata
+            data.shift();
+        }
 
         // Update the state
         setLastVals(newVals);
-
-        // Remove sdata
-        data.shift();
+        setLastUpdate(newUpdate);
         setData(data);
     }, [data]);
 
@@ -72,6 +78,7 @@ function NonContinuous(props) {
                                         <div><p>{fieldNamesArr[i]}</p></div>
                                         <div><p>{lastVals[signal.Name] == undefined ? "-" : lastVals[signal.Name][fieldNamesArr[i]]}</p></div>
                                         <div><p>{unitsArr[i]}</p></div>
+                                        <div><p>{(i == 0) ? lastUpdate[signal.Name] : ""}</p></div>
                                     </>
                                 )
 
