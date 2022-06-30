@@ -139,8 +139,18 @@ body {
   background-color: #ccc;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between ;
+  flex: 0 0 36px;
 }
+
+.timeSliderContainer{
+  width: 100%;
+  height: 36px;
+  background-color: #ccc;
+  flex: 0 0 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
 .plotTitleContainer>p {
   margin: 20px;
@@ -150,12 +160,17 @@ body {
   color: #777 !important;
 }
 
-.plotContainer {
+.plotComponentContainer {
   position: relative;
   overflow: hidden;
   border-radius: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
+.plotContainer{
+  flex:auto
+}
 
 .plotMenuItem {
   display: grid;
