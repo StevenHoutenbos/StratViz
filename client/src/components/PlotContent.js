@@ -17,7 +17,9 @@ import * as sio from "../index";
 import Slider from "@mui/material/Slider";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import Remove from "@mui/icons-material/Remove";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { getUnixTime, format } from "date-fns";
 
 
 var hash = require("object-hash");
@@ -85,7 +87,21 @@ function PlotContent(props) {
     const [plotName, setPlotName] = useState(props.plotName)
     const [signals, setSignals] = useState(props.signals);
     const [data, setData] = useState([]);
-    const [range, setRange] = useState([10, 20])
+
+    // Specified range: (unix time)
+    //     Historical mode: the dateTimes specified in the plotmenu
+    //     Realtime mode: last received timestamp, and 'realTimeRange' minutes before that.
+    const [specRange, setSpecRange] = useState([1655432776, 1656432800])
+
+    // Current range: range that is currently viewed
+    const [curRange, setCurRange] = useState([1655432876, 1656432700])
+
+    // Last recieved timestamp (from incoming data)
+    const [lastTimestamp, setLastTimestamp] = useState([1655432776, 1656432800]);
+    // Number of seconds we want to see in real time mode
+    const [realTimeRange, setRealTimeRange] = useState(7200);
+    // DateTimes from the plot menu
+    const [dateTimes, setDateTimes] = useState([new Date('2014-08-18T21:11:54'), new Date('2014-08-18T23:11:54')])
 
     const [searchQuery, setSearchQuery] = useState("");
     const dataFiltered = filterData(searchQuery, searchData);
@@ -114,6 +130,11 @@ function PlotContent(props) {
         };
     }, [])
 
+    // handle adding new timestamp
+    const appendTimeStamp = (newTimestamp) => {
+        setLastTimestamp([lastTimestamp[1], newTimestamp])
+    }
+
     useEffect(() => {
         // data = { topic: topic, key: car, data: {data object}}
         while (data.length != 0) {
@@ -122,8 +143,16 @@ function PlotContent(props) {
                 console.log(signal.signalName.split(" - ")[0] + ":" + sdata.topic);
                 if (signal.signalName.split(" - ")[0] === sdata.topic && ("car" + selectedCar) === sdata.key) {
                     console.log(sdata);
+
+                    // push data to plot
                     signal.trace.x.push(sdata.data.timestamp);
                     signal.trace.y.push(sdata.data[signal.signalName.split(" - ")[1]]);
+
+                    // update last timestamp, so range slider functions correctly
+                    if (sdata.data.timestamp > lastTimestamp) {
+                        appendTimeStamp(sdata.data.timestamp);
+                    }
+
                 }
             });
             // TODO: read off range from graph
@@ -137,6 +166,16 @@ function PlotContent(props) {
         setData(data);
     }, [data]);
 
+    // update the range when in real time mode
+    useEffect(() => {
+        if (!historic) {
+            // Set spec range from last timestamp 
+            setSpecRange([lastTimestamp[1] - realTimeRange, lastTimestamp[1]])
+            // slide the current range along to the last timestamp
+            setCurRange([curRange[0] + (lastTimestamp[1] - lastTimestamp[0]), lastTimestamp[1]])
+        }
+    }, [lastTimestamp])
+
     const historicButton = <TimelineIcon />
     const realtimeButton = <HistoryIcon />
 
@@ -149,50 +188,90 @@ function PlotContent(props) {
     };
 
     const handleTimeMode = () => {
-        var newRange = [range[0], rangeMax]
-        setRange(newRange)
-        setHistoric(historic => !historic);
+
+        // switch time mode
+        setHistoric(!historic);
+
+        // if time mode is historic
+        if (historic) {
+            // Set range to dateTime inputs from plot menu
+            setSpecRange([getUnixTime(dateTimes[0]), getUnixTime(dateTimes[1])])
+            // set current range to the complete specified range
+            setCurRange(specRange)
+        } else {
+            // Set range from last timestamp to 'realTimeRange' seconds before that.
+            setSpecRange([lastTimestamp[1] - realTimeRange, lastTimestamp[1]]);
+            // set current range to 10 minutes from the end
+            setCurRange(specRange)
+        }
+
     }
 
     const handleSliderChange = (event, newValue, activeThumb) => {
+
         if (!Array.isArray(newValue)) {
-          return;
+            return;
         }
-    
+
+        // if the distance between thumbs is smaller than minDistance
         if (newValue[1] - newValue[0] < minDistance) {
-          if (activeThumb === 0) {
-            const clamped = Math.min(newValue[0], rangeMax - minDistance);
-            setRange([clamped, clamped + minDistance]);
-          } else if (historic){
-            const clamped = Math.max(newValue[1], minDistance);
-            setRange([clamped - minDistance, clamped]);
-          }
+            // if we have the leftmost thumb
+            if (activeThumb === 0) {
+                // update the value
+                const clamped = Math.min(newValue[0], curRange[1] - minDistance);
+                setCurRange([clamped, clamped + minDistance]);
+            } else if (historic) { // if we have the rightmost thumb, only update in historical mode
+                const clamped = Math.max(newValue[1], minDistance);
+                setCurRange([clamped - minDistance, clamped]);
+            }
         } else {
-          if (historic){  
-          setRange(newValue);
-          } else {
-            setRange([newValue[0], rangeMax])
-          }
+            if (historic) {
+                setCurRange(newValue);
+            } else {
+                setCurRange([newValue[0], curRange[1]])
+            }
         }
-      };
+    };
 
-      const handleZoomIn = () => {
-        var rangeSize = (range[1] - range[0])*zoomMultiplier;
-        if(historic){
-            setRange([range[0] + rangeSize, range[1] - rangeSize])
-        } else {
-            setRange([range[0] + rangeSize, rangeMax])
-        }
-      }
+    // handle change dateTime 
+    const handleChangeDateTimesLeft = (newValue) => {
+        setDateTimes([newValue, dateTimes[1]]);
+    }
 
-      const handleZoomOut = () => {
-        var rangeSize = (range[1] - range[0])*zoomMultiplier;
-        if(historic){
-            setRange([range[0] - rangeSize , range[1] + rangeSize])
-        } else {
-            setRange([range[0] - rangeSize, rangeMax])
+    const handleChangeDateTimesRight = (newValue) => {
+        setDateTimes([dateTimes[0], newValue])
+    }
+
+    // if DateTime is changed, request new data from the server
+    useEffect(() => {
+        if (historic) {
+            setSpecRange([getUnixTime(dateTimes[0]), getUnixTime(dateTimes[1])]);
+            setCurRange([getUnixTime(dateTimes[0]), getUnixTime(dateTimes[1])]);
+
+            signals.forEach((signal) => {
+                const input = { topic: signal.signalName.split(" - ")[0], key: ("car" + selectedCar), start: getUnixTime(dateTimes[0]), end: getUnixTime(dateTimes[1]) }
+                sio.getHistoric(input, (result) => { console.log(result) })
+            })
         }
-      }
+    }, [dateTimes])
+
+    const handleZoomIn = () => {
+        var rangeSize = (curRange[1] - curRange[0]) * zoomMultiplier;
+        if (historic) {
+            setCurRange([curRange[0] + rangeSize, curRange[1] - rangeSize])
+        } else {
+            setCurRange([curRange[0] + rangeSize, specRange[1]])
+        }
+    }
+
+    const handleZoomOut = () => {
+        var rangeSize = (curRange[1] - curRange[0]) * zoomMultiplier;
+        if (historic) {
+            setCurRange([curRange[0] - rangeSize, curRange[1] + rangeSize])
+        } else {
+            setCurRange([curRange[0] - rangeSize, specRange[1]])
+        }
+    }
 
     const handleAddSignal = (e) => {
 
@@ -266,11 +345,15 @@ function PlotContent(props) {
         setPlotName(e.target.value);
     }
 
+    const convertDateLabel = (value) => {
+        return format(new Date(value * 1000), 'MM-dd HH:mm:ss')
+    }
+
     // console.log(trace.x);
 
     var layout = {
         xaxis: {
-            range: range,
+            range: curRange,
             type: 'int',
         },
         yaxis: {
@@ -278,7 +361,7 @@ function PlotContent(props) {
             type: "linear"
         },
         width: width,
-        height: height -80,
+        height: height - 80,
         autosize: true,
         useResizeHandler: true,
         className: "plotGraph",
@@ -301,40 +384,46 @@ function PlotContent(props) {
                 </Button>
                 <p>{plotName}</p>
                 <div>
-                <Button variant="text" onClick={handleZoomIn} className="plotTitleButton">
-                    <AddIcon/>
-                </Button>
-                <Button variant="text" onClick={handleZoomOut} className="plotTitleButton">
-                    <RemoveIcon/>
-                </Button>
-                <Button variant="text" onClick={handleTimeMode} className="plotTitleButton">
-                    {historic ? historicButton : realtimeButton}
-                </Button>
+                    <Button variant="text" onClick={handleZoomIn} className="plotTitleButton">
+                        <AddIcon />
+                    </Button>
+                    <Button variant="text" onClick={handleZoomOut} className="plotTitleButton">
+                        <RemoveIcon />
+                    </Button>
                 </div>
             </div>
             <div className="plotContainer">
-            {signals.length == 0 ? undefined :
-                <Plot
-                    data={signals.map(({ trace }) => (trace))}
-                    layout={layout}
-                    config={{
-                        "displaylogo": false,
-                        responsive: true
-                    }}
-                    divId={props.plotId}
-                />
-            }
+                {signals.length == 0 ? undefined :
+                    <Plot
+                        data={signals.map(({ trace }) => (trace))}
+                        layout={layout}
+                        config={{
+                            "displaylogo": false,
+                            responsive: true,
+                            "modeBarButtonsToRemove": ['zoomIn2d', 'zoomOut2D']
+                        }}
+                        divId={props.plotId}
+                    />
+                }
             </div>
+
+            {/* time slider */}
             <div className="timeSliderContainer">
                 <Slider
                     getAriaLabel={() => 'Minimum distance shift'}
-                    value={range}
+                    getAriaValueText={convertDateLabel}
+                    value={curRange}
                     onChange={handleSliderChange}
+                    valueLabelFormat={convertDateLabel}
                     valueLabelDisplay="auto"
+                    min={specRange[0]}
+                    max={specRange[1]}
                     disableSwap
-                    sx={{width: "100%"}}
+                    sx={{ width: "100%" }}
                 />
             </div>
+
+            {/* plot menu */}
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={"md"}>
                 <DialogTitle>
                     <TextField id="standard-basic" variant="standard" defaultValue={plotName} onBlur={handleChangePlotName} />
@@ -345,6 +434,25 @@ function PlotContent(props) {
                     </ButtonGroup>
                 </DialogTitle>
                 <DialogContent>
+                <Button variant="text" onClick={handleTimeMode} className="plotTitleButton">
+                        {historic ? historicButton : realtimeButton}
+                    </Button>
+                    historical from:
+                    <DateTimePicker
+                        disabled={historic}
+                        label="DateTime picker"
+                        value={dateTimes[0]}
+                        onChange={handleChangeDateTimesLeft}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                    to:
+                    <DateTimePicker
+                        disabled={historic}
+                        label="DateTime picker"
+                        value={dateTimes[1]}
+                        onChange={handleChangeDateTimesRight}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
                     <div className="signalContainer">
                         <div className="plotMenuItem bold">
                             <div>Sensor</div>

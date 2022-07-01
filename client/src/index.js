@@ -7,7 +7,7 @@ import io from "socket.io-client"
 let data;
 //export {data};
 
-export const socket = io('http://localhost:4000');
+export const socket = io('http://78.47.218.125:4000');
 
 export function subscribe(topic, key) {
   socket.emit("client-subscribe", { topic, key });
