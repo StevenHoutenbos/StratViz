@@ -22,12 +22,19 @@ function NonContinuous(props) {
 
         while (data.length != 0) {
             // sdata = { topic: topic, key: car, data: {data object}}
-            var sdata = data[0];
+            var sdata = data[data.length - 1];
+
+            // Ensure this date is newer than the last
+            if (newUpdate[sdata.topic] > sdata.data.timestamp) {
+                // Ignore this entry
+                data.pop();
+                continue;
+            }
 
             var newVal = {};
 
             // For all the fields in the data object
-            for (const [key, value] of Object.entries(sdata.data)) {
+            for (const key of Object.keys(sdata.data)) {
                 // That are not timestamp or name
                 if (key === "timestamp" || key === "name") {
                     continue;
@@ -37,14 +44,13 @@ function NonContinuous(props) {
                 newVal[key] = sdata.data[key].toString();
             }
 
-            console.log(newVal);
             // Then set the value object of this topic to the new value
             newVals[sdata.topic] = newVal;
             // And set the timestamp of the last update
             newUpdate[sdata.topic] = sdata.data.timestamp;
 
             // Remove sdata
-            data.shift();
+            data.pop();
         }
 
         // Update the state
@@ -58,36 +64,36 @@ function NonContinuous(props) {
             <h1>Non-continuous Values</h1>
             <div className="ncGridContainer">
                 {signals.map((signal) => {
-                    if (!(signal["Data types"].includes("int") || signal["Data types"].includes("float"))) {
+                    const unitsArr = signal["Units"].replaceAll(" ", "").split(',');
+                    const fieldNamesArr = signal["Field names"].replaceAll(" ", "").split(',');
+                    const dataTypesArr = signal["Data types"].replaceAll(" ", "").split(',');
 
-                        const unitsArr = signal["Units"].replaceAll(" ", "").split(',');
-                        const fieldNamesArr = signal["Field names"].replaceAll(" ", "").split(',');
+                    const jsxArr = [];
 
-                        const jsxArr = [];
-
-                        if (unitsArr.length != fieldNamesArr.length) {
-                            console.log('Arrays not of same size!')
-                        } else {
-                            for (let i = 0; i < fieldNamesArr.length; i++) {
-                                console.log(fieldNamesArr[i]);
-                                console.log(lastVals[signal.Name]);
-
-                                jsxArr.push(
-                                    <>
-                                        <div><p className="signalName">{(i == 0) ? signal.Name : ""}</p></div>
-                                        <div><p>{fieldNamesArr[i]}</p></div>
-                                        <div><p>{lastVals[signal.Name] == undefined ? "-" : lastVals[signal.Name][fieldNamesArr[i]]}</p></div>
-                                        <div><p>{unitsArr[i]}</p></div>
-                                        <div><p>{(i == 0) ? lastUpdate[signal.Name] : ""}</p></div>
-                                    </>
-                                )
-
+                    if (unitsArr.length != fieldNamesArr.length) {
+                        console.log('Arrays not of same size!')
+                    } else {
+                        for (let i = 0; i < fieldNamesArr.length; i++) {
+                            // Skip subfields that contain int or float values
+                            if (dataTypesArr[i].includes("int") || dataTypesArr[i].includes("float")) {
+                                continue;
                             }
 
-                            return (
-                                <> {jsxArr} </>
+                            jsxArr.push(
+                                <>
+                                    <div><p className="signalName">{(i == 0) ? signal.Name : ""}</p></div>
+                                    <div><p>{fieldNamesArr[i]}</p></div>
+                                    <div><p>{lastVals[signal.Name] == undefined ? "-" : lastVals[signal.Name][fieldNamesArr[i]]}</p></div>
+                                    <div><p>{unitsArr[i]}</p></div>
+                                    <div><p>{(i == 0) ? (lastUpdate[signal.Name] == undefined ? "" : new Date(lastUpdate[signal.Name]).toLocaleTimeString()) : ""}</p></div>
+                                </>
                             )
+
                         }
+
+                        return (
+                            <> {jsxArr} </>
+                        )
                     }
                 }
                 )}
