@@ -4,6 +4,8 @@ import configJSON from "./config.json"
 import Tabs from "./components/Tabs";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './css/tabs.css';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 const theme = createTheme({
   palette: {
@@ -65,15 +67,17 @@ function App() {
   }
 
   const addTab = (tabId) => {
-    var tabsState = {...config.tabs};
+    var tabsState = { ...config.tabs };
     tabsState.push(newTab(tabId));
-    setConfig({tabsState}); 
+    setConfig({ tabsState });
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Tabs config={config} setTabName={setTabName} addTab={addTab}/>
-    </ThemeProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ThemeProvider theme={theme}>
+        <Tabs config={config} setTabName={setTabName} addTab={addTab} />
+      </ThemeProvider>
+    </LocalizationProvider>
   );
 }
 
