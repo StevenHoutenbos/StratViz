@@ -1,85 +1,102 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Tab extends Component {
 
-    constructor(props){
-      super(props);
-      this.state = {
-        editing: false,
-      }
+    constructor(props) {
+        super(props);
+        this.state = {
+            editing: false,
+        }
     }
 
     static propTypes = {
-      activeTab: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      onClick: PropTypes.func.isRequired,
+        activeTab: PropTypes.string.isRequired,
+        key: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+        onClick: PropTypes.func.isRequired,
     };
-  
+
     onClick = () => {
-      const { tabId, onClick } = this.props;
-      onClick(tabId);
+        // import functions from props
+        const { tabId, onClick } = this.props;
+        // tell the parent component that this tab has been clicked
+        onClick(tabId);
     }
 
     onDoubleClick = () => {
-      this.setState({editing: true}); 
+        // activate editing mode
+        this.setState({ editing: true });
     }
 
     deleteTab = () => {
-      const {tabId, onDelete} = this.props;
-      onDelete(tabId);
-    }
-  
-    handleFocus(e) {
-      e.currentTarget.select();
+        // import functions from props
+        const { tabId, onDelete } = this.props;
+        // tell the parent component to delete this tab
+        onDelete(tabId);
     }
 
     handleBlur = (e) => {
-      const {tabId, onChangeTabName} = this.props;
-      const newTitle = e.target.value;
-      onChangeTabName(tabId, newTitle);
-      this.setState({editing: false})
+        // import functions from props
+        const { tabId, onChangeTabName } = this.props;
+
+        // read input field and store it
+        const newTitle = e.target.value;
+
+        // change the tab name and quit editing mode
+        onChangeTabName(tabId, newTitle);
+        this.setState({ editing: false })
     }
 
     render() {
-      const {
-        onClick,
-        onDoubleClick,
-        deleteTab,
-        props: {
-          activeTab,
-          label,
-          tabId,
-          editable,
-          styleName
-        },
-      } = this;
-  
-      let className = 'tab-list-item ' + styleName;
-  
-      if (activeTab === tabId) {
-        className += ' tab-list-active';
-      }
 
-      const labelEditHTML = 
-      <>
-          <input autoFocus type="text" id='edit' defaultValue={label} onFocus={this.handleFocus} onBlur={this.handleBlur}/>
-          <svg style={{width:"14px",height:"14px",padding:"0px", paddingLeft: "10px"}} viewBox="0 0 22 22" onMouseDown={this.deleteTab}>
-          <path fill="currentColor" d="M19,13H5V11H19V13Z" />
-          </svg>
-      </>
+        const {
+            onClick,
+            onDoubleClick,
+            props: {
+                activeTab,
+                label,
+                tabId,
+                editable,
+                styleName
+            },
+        } = this;
 
-      return (
-        <li
-          className = {className}
-          onClick = {onClick}
-          onDoubleClick = {editable ? onDoubleClick : ""}
-        >
-          {(this.state.editing ? labelEditHTML : label)}
-        </li>
-      );
+        // add standard styling, plus any styling that was passed on by parent as prop
+        let className = 'tab-list-item ' + styleName;
+
+        // If this tab is the active tab, add some styling
+        if (activeTab === tabId) {
+            className += ' tab-list-active';
+        }
+
+        // HTML for editing tabname / deleting a tab. This is only shown when editing mode is active.
+        const labelEditHTML =
+            <>
+                {/* add an input field for the tabname. 
+                When user clicks elsewhere on the screen (blur), handle the blur event.
+                on focus, select the textfield, so user can directly start typing a new tab name. */}
+                <input autoFocus type="text" id='edit' defaultValue={label} onFocus={(e) => e.currentTarget.select()} onBlur={this.handleBlur} />
+
+                {/* add button to remove tab */}
+                <svg style={{ width: "14px", height: "14px", padding: "0px", paddingLeft: "10px" }} viewBox="0 0 22 22" onMouseDown={this.deleteTab}>
+                    <path fill="currentColor" d="M19,13H5V11H19V13Z" />
+                </svg>
+            </>
+
+        return (
+            <li
+                className={className}
+                onClick={onClick}
+
+                // when not in editing mode, activate double click to edit functionality
+                onDoubleClick={editable ? onDoubleClick : ""}
+            >
+                {/* if editing, show input field, else show the tab name (label) */}
+                {(this.state.editing ? labelEditHTML : label)}
+            </li>
+        );
     }
-  }
-  
-  export default Tab;
+}
+
+export default Tab;

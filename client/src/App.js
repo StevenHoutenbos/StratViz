@@ -1,84 +1,52 @@
 import React, { useState } from 'react';
+
+// import css
 import "./css/master.css";
+
+// import the file that defines the default config
 import configJSON from "./config.json"
+
 import Tabs from "./components/Tabs";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import './css/tabs.css';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
+
+// create a theme that react will use
 const theme = createTheme({
-  palette: {
-    primary: {
-      light: '#DDD',
-      main: '#DDD',
-      dark: '#DDD',
-      contrastText: '#000',
+    palette: {
+        primary: {
+            light: '#DDD',
+            main: '#DDD',
+            dark: '#DDD',
+            contrastText: '#000',
+        },
+        secondary: {
+            light: '#CCC',
+            main: '#CCC',
+            dark: '#CCC',
+            contrastText: '#000',
+        },
     },
-    secondary: {
-      light: '#CCC',
-      main: '#CCC',
-      dark: '#CCC',
-      contrastText: '#000',
-    },
-  },
 });
 
 function App() {
 
-  var tabIdCounter = 0;
+    return (
 
-  const getNewTabId = () => {
-    while (config.tabs.find(x => x.tabId === tabIdCounter) != undefined) {
-      tabIdCounter++;
-    }
-    return tabIdCounter;
-  }
+        // add localization provider for dateTime selectors in plot menus
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-  const [config, setConfig] = useState(configJSON);
+            {/* add the theme to the react app */}
+            <ThemeProvider theme={theme}>
 
-  const setTabName = (tabId, newTitle) => {
-    console.log(config.tabs.find(x => x.tabId === tabId));
-    const newConfig = structuredClone(config);
-    newConfig.tabs.find(x => x.tabId === tabId).tabName = newTitle;
-    setConfig(newConfig);
-    console.log(JSON.stringify(config));
-  }
+                {/* load the main component of our app */}
+                <Tabs config={configJSON} />
 
-  const newTab = (newTabId) => {
-    return {
-      tabId: "joe",
-      tabName: "new tab",
-      graphs: [
-        {
-          graphName: "new title"
-        },
-        {
-          graphName: "new title"
-        },
-        {
-          graphName: "new title"
-        },
-        {
-          graphName: "new title"
-        }
-      ]
-    }
-  }
-
-  const addTab = (tabId) => {
-    var tabsState = { ...config.tabs };
-    tabsState.push(newTab(tabId));
-    setConfig({ tabsState });
-  }
-
-  return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <ThemeProvider theme={theme}>
-        <Tabs config={config} setTabName={setTabName} addTab={addTab} />
-      </ThemeProvider>
-    </LocalizationProvider>
-  );
+            </ThemeProvider>
+            
+        </LocalizationProvider>
+    );
 }
 
 export default App;

@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
 html,
 body,
 #app,
@@ -22,6 +38,8 @@ body {
 }
 
 .tab-list {
+  display: flex;
+  align-items: center;
   padding-left: 0;
   margin: 0px;
   background: #ccc;
@@ -80,7 +98,7 @@ body {
 
 .ncGridContainer {
   display: grid;
-  grid-template-columns: auto 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr 1fr 1fr 1fr;
 }
 
 .ncGridContainer>div {
@@ -135,7 +153,18 @@ body {
   background-color: #ccc;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex: 0 0 36px;
+}
+
+.timeSliderContainer {
+  width: 100%;
+  height: 28px;
+  background-color: #ccc;
+  flex: 0 0 36px;
+  display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .plotTitleContainer>p {
@@ -146,12 +175,17 @@ body {
   color: #777 !important;
 }
 
-.plotContainer {
+.plotComponentContainer {
   position: relative;
   overflow: hidden;
   border-radius: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
+.plotContainer {
+  flex: auto
+}
 
 .plotMenuItem {
   display: grid;
@@ -208,4 +242,53 @@ body {
   background: white;
   box-shadow: 0px 0px 10px #ddd;
   padding: 20px;
+}
+
+.tabButton {
+  color: #777;
+  padding-right: 14px;
+  cursor: pointer;
+}
+
+.ncTab {
+  margin-left: auto;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+  margin: 0px;
+  padding: 0px;
+  font-weight: 400;
+}
+
+.timeModeContainer{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.ncHeader{
+  display: flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.ncColumnTitle{
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.ml12{
+  margin-left: 12px;
+}
+
+.mr12{
+  margin-right: 12px;
+}
+
+.mt12{
+  margin-top: 6px;
 }
